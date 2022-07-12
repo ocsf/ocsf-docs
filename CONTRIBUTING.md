@@ -100,7 +100,7 @@ A sample .json object file,
 4. `description` → Add a concise description to define the object.
 5. `extends` → Ensure the value is `object` (All objects in OCSF extend a base definition of object)
 6. `name` → Add a **unique** name of the object
-7.  `attribute` → Add the attributes that you want to define in the object, 
+7.  `attributes` → Add the attributes that you want to define in the object, 
     1. `requirement` →  For each attribute ensure you add a requirement value. Valid values are `optional`, `required`, `reserved`, `recommended` 
 
 
