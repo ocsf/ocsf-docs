@@ -131,7 +131,7 @@ Choose a **unique** object you want to add, `vulnerability` in the example above
 1. All the available Event Classes are defined as .json files in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder.
 2. Review existing Event Classes, determine if a modification of the existing class would be sufficient or f there’s a need for a completely new event_class.
 3. To define a new class, 
-    1. Create a new file →  `<event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events)folder.
+    1. Create a new file →  `<event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder.
     2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/%3Cevent_class_name%3E.json), to get started with the .json definition.
     3. `uid` → Select an integer in the range 0 - 99. Ensure the integer is **unique** within the category.
         * Note: Without `uid`, an event_class won’t be visible in the ocsf-server.
@@ -162,14 +162,14 @@ Sample error messages -
 
 All contributors should submit their changes via pull requests. If you're not familiar with pull requests, please read [the GitHub documentation](https://help.github.com/en/articles/about-pull-requests). Following are a few guidelines and expectations for submitting a PR.
 
-    1. Fork the repo that you want to contribute to ([ocsf-schema](https://github.com/ocsf/ocsf-schema), [ocsf-docs](https://github.com/ocsf/ocsf-docs), [ocsf-server](https://github.com/ocsf/ocsf-server))
-    2. Make desired changes in the forked repo, test if everything works as expected and is error-free, a local instance of the [ocsf-server](https://github.com/ocsf/ocsf-server) would be essential.
-    3. Push the changes to the forked repo
-    4. Create a **Pull Request** to merge changes into the main repo, request at least one approver.
-        1. Limit the number of commits in a single PR to aid reviewers, be as specific with the change as possible. A single PR must contain related changes.
-        2. Describe your change in as much detail as possible.
-        3. Confirm that you have tested the changes, and the server run was error free.
-        4. Check the Preview tab to ensure everything looks as expected.
+1. Fork the repo that you want to contribute to ([ocsf-schema](https://github.com/ocsf/ocsf-schema), [ocsf-docs](https://github.com/ocsf/ocsf-docs), [ocsf-server](https://github.com/ocsf/ocsf-server))
+2. Make desired changes in the forked repo, test if everything works as expected and is error-free, a local instance of the [ocsf-server](https://github.com/ocsf/ocsf-server) would be essential.
+3. Push the changes to the forked repo
+4. Create a **Pull Request** to merge changes into the main repo, request at least one approver.
+    1. Limit the number of commits in a single PR to aid reviewers, be as specific with the change as possible. A single PR must contain related changes.
+    2. Describe your change in as much detail as possible.
+    3. Confirm that you have tested the changes, and the server run was error free.
+    4. Check the Preview tab to ensure everything looks as expected.
     5. Once the PR is ready, request an approver and submit it.
 
 * * *
