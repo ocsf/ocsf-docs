@@ -12,17 +12,18 @@ This documentation is about making changes to OCSF schema itself.
 
 ### Key Terminology
 
-1. **Field**: A field is a unique identifier for a piece of data contained in OCSF. Each field also designates a corresponding data_type.
-2. **Object**: An object is a collection of contextually related fields, it is also a data_type in OCSF.
-3. **Event Class**: An event is represented by an Event Class, which are a particular set of attributes (including fields & objects) representing a log line or telemetry submission at a point in time.
-4. **Category:** A Category organizes event classes that represent a particular domain.
+1. **Field**: A field is a unique identifier name for a piece of data contained in OCSF. Each field also designates a corresponding data_type.
+2. **Object**: An object is a collection of contextually related fields, and other objects.  It is also a data_type in OCSF.
+3. **Attribute**: An attribute is the more generic name for both fields and objects in OCSF.  A field is a scalar attribute while an object is a complex attribute.
+4. **Event Class**: An event is represented by an Event Class, which are a particular set of attributes (including fields & objects) representing a log line or telemetry submission at a point in time.
+5. **Category:** A Category organizes event classes that represent a particular domain.
 
 ## How do I add an event_class? 
 
 ### In brief -
 
 1. Determine all the `attributes` (including fields and objects) you would want to add in the `event_class`
-2. Check the [dictionary](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) and determine the new attributes that you require, some of your desired attributes may already be present.
+2. Check the [dictionary](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) and determine the new fields that you require, and the objects (https://github.com/ocsf/ocsf-schema/tree/main/objects), many of your desired attributes may already be present.
 3. Define the missing attributes → Adding a `field` , Adding an `object`.
 4. Determine which category you would want to add your event_class in, note it’s  `name`
 5. Create a new file →  `<event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events)folder.
@@ -34,8 +35,8 @@ This documentation is about making changes to OCSF schema itself.
 
 ### Adding/Modifying an `attribute`
 
-1. All the available `attributes` - `fields` & `objects` in OCSF are and will need to be defined in the attribute dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file.
-2. Determine if a new attribute is required for your change, it might already be defined in the OCSF dictionary.
+1. All the available `attributes` - `fields` & `objects` in OCSF are and will need to be defined in the attribute dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file and objects folder (https://github.com/ocsf/ocsf-schema/tree/main/objects).
+2. Determine if a new attribute is required for your change, it might already be defined in the OCSF dictionary or object folder.
 3. Before adding a new attribute, review OCSF grammar & conventions || TASK - Add a grammar.md 
 
 #### How to define a `field` in the dictionary?
@@ -70,7 +71,7 @@ Choose a **unique** field you want to add, `uid` in the example above and popula
 
 #### How to define an `object`?
 
-1. All the available `objects` need to be defined as individual entries in the attribute dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file and as distinct .json files in the [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder. 
+1. All the available `objects` need to be defined as individual field entries in the dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file and as distinct .json files in the [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder. 
 2. Review existing Objects, determine if a modification of the existing object would be sufficient or if there’s a need for a completely new object.
 
 
@@ -105,7 +106,7 @@ A sample .json object file,
 
 
 
-Sample entry in the dictionary -
+Sample entry in the objects folder -
 
 ```
     "vulnerability": 
