@@ -47,7 +47,7 @@ Sample entry in the dictionary -
 ```
     "uid": 
     {
-      "caption": "Unique ID", || "previously name"
+      "caption": "Unique ID", // "previously name"
       "description": "The unique identifier. See specific usage.",
       "type": "string_t"
     }
@@ -78,8 +78,8 @@ A sample .json object file,
 
 ```
 {
-  "caption": "Vulnerability Details", || "previously name"
-  "name": "vulnerability", || "previously type"
+  "caption": "Vulnerability Details", // "previously name"
+  "name": "vulnerability", // "previously type"
   "description": "The vulnerability object describes details related to the observed vulnerability.",
   "extends": "object",
   "attributes": {
@@ -110,9 +110,9 @@ Sample entry in the dictionary,
 ```
     "vulnerability": 
     {
-      "caption": "Vulnerability", || "previously name"
+      "caption": "Vulnerability", // "previously name"
       "description": "The vulnerability object describes details related to the observed vulnerability",
-      "name": "vulnerability" || "previously type"
+      "type": "vulnerability"
     }
 ```
 
