@@ -23,10 +23,10 @@ This documentation is about making changes to OCSF schema itself.
 ### In brief -
 
 1. Determine all the `attributes` (including fields and objects) you would want to add in the `event_class`
-2. Check the [dictionary](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) and determine the new fields that you require, and the objects (https://github.com/ocsf/ocsf-schema/tree/main/objects), many of your desired attributes may already be present.
+2. Check the [dictionary](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) and the [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder, many of your desired attributes may already be present.
 3. Define the missing attributes → Adding a `field` , Adding an `object`.
 4. Determine which category you would want to add your event_class in, note it’s  `name`
-5. Create a new file →  `<event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events)folder.
+5. Create a new file →  `<event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder.
     1. TASK - Update category.json to make the names consistent with the folder names, probably can also order the categories in alphabetical order
 6. Define the `event_class` itself → Adding an `event_class`.
 7. Finally, verify the changes are working as expected in your local [ocsf-server](https://github.com/ocsf/ocsf-server).
@@ -35,8 +35,8 @@ This documentation is about making changes to OCSF schema itself.
 
 ### Adding/Modifying an `attribute`
 
-1. All the available `attributes` - `fields` & `objects` in OCSF are and will need to be defined in the attribute dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file and objects folder (https://github.com/ocsf/ocsf-schema/tree/main/objects).
-2. Determine if a new attribute is required for your change, it might already be defined in the OCSF dictionary or object folder.
+1. All the available `attributes` - `fields` & `objects` in OCSF are and will need to be defined in the attribute dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file and [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder if defining an object.
+2. Determine if a new attribute is required for your change, it might already be defined in the attribute dictionary and/or the [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder.
 3. Before adding a new attribute, review OCSF grammar & conventions || TASK - Add a grammar.md 
 
 #### How to define a `field` in the dictionary?
@@ -106,7 +106,7 @@ A sample .json object file,
 
 
 
-Sample entry in the objects folder -
+Sample entry in the dictionary,
 
 ```
     "vulnerability": 
