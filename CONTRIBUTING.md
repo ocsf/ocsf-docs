@@ -120,7 +120,7 @@ Choose a **unique** object you want to add, `vulnerability` in the example above
 
 1. `caption` → Add a user friendly name to the object
 2. `description` → Add a concise description to define the object.
-3. `name` → Add a **unique** name of the object
+3. `type` → Add the type of the object you are defining. 
 4. `is_array` → This a boolean key:value pair that you would need to add if the object you are defining is an array.
     1. e.g. `"is_array": true`
 
@@ -135,7 +135,7 @@ Choose a **unique** object you want to add, `vulnerability` in the example above
     2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/%3Cevent_class_name%3E.json), to get started with the .json definition.
     3. `uid` → Select an integer in the range 0 - 99. Ensure the integer is **unique** within the category.
         * Note: Without `uid`, an event_class won’t be visible in the ocsf-server.
-    4. `name` → Add a user friendly name to the event_class. || caption
+    4. `caption` → Add a user friendly name to the event_class.
     5. `description` → Add a concise description to define the attributes.
     6. `name` → Add a **unique** name of the event_class. Ensure it matches the file name to maintain consistency.
     7. `extends` → Ensure the value is `base_event`.
