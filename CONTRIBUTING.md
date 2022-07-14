@@ -95,7 +95,7 @@ A sample .json object file,
 ```
 
 1. Create a new file → `<object_name.json>` in [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder.
-2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/%3Cobject_name%3E.json), to get started with .json file definition.
+2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/object_name.json), to get started with .json file definition.
 3. `caption` → Add a user friendly name to the object
 4. `description` → Add a concise description to define the object.
 5. `extends` → Ensure the value is `object` (All objects in OCSF extend a base definition of object)
@@ -132,7 +132,7 @@ Choose a **unique** object you want to add, `vulnerability` in the example above
 2. Review existing Event Classes, determine if a modification of the existing class would be sufficient or f there’s a need for a completely new event_class.
 3. To define a new class, 
     1. Create a new file →  `<event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder.
-    2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/%3Cevent_class_name%3E.json), to get started with the .json definition.
+    2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/event_class_name.json), to get started with the .json definition.
     3. `uid` → Select an integer in the range 0 - 99. Ensure the integer is **unique** within the category.
         * Note: Without `uid`, an event_class won’t be visible in the ocsf-server.
     4. `caption` → Add a user friendly name to the event_class.
