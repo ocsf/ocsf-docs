@@ -5,7 +5,8 @@ This document lists the members of the Organization's Steering Committee. Voting
 | **NAME** | **Handle** | **Affiliated Organization** |
 | --- | --- | --- |
 | [Steering Committee Member] | [handle ] | [affiliation] |
-|  ... | ... | ... |
+|  Paul Agbabian | pagbabian-splunk | Splunk |
+|  Keith Gilbert |...| AWS |
 
 ---
 Part of MVG-0.1-beta.
