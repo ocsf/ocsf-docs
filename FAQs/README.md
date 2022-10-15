@@ -40,7 +40,8 @@ as a real willingness to tackle these challenges.
 
 ##
 
-##
+## What is OCSF Governance Model?
+See [OCSF Governance](https://github.com/ocsf/governance/blob/main/Governance.md)
 
 ## How does OCSF relate to STIX?
 OCSF and STIX are compatible.
