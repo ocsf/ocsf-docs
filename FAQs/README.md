@@ -56,6 +56,19 @@ or the
 
 Add something here on how OCSF/STIX are complimentary
 
+
+## How does OCSF relate to Kestrel?
+OCSF and Kestrel are compatible.
+
+The Kestrel Threat Hunting Language
+provides an abstraction for threat hunters
+to focus on what to hunt instead of how to hunt.
+See their
+[repo](https://github.com/opencybersecurityalliance/kestrel-lang)
+for more information.
+
+Add something here on how OCSF/Kestrel are complimentary
+=======
 ##
 =======
 ## How does OCSF relate to OSSEM?
@@ -66,6 +79,7 @@ is a community-led project focused
 primarily on the documentation,
 standardization and modeling of security event logs.
 See [OSSEM repo](https://github.com/OTRF/OSSEM)
+
 
 
 ##
