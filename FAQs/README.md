@@ -1,5 +1,37 @@
 # Frequently Asked Questions
+##
 
+## How does OCSF relate to OSSEM?
+draft text for here
+
+Open Source Security Events Metadata (OSSEM)
+is a community-led project focused
+primarily on the documentation,
+standardization and modeling of security event logs.
+See [OSSEM repo](https://github.com/OTRF/OSSEM)
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+=======
 ## What is OCSF?
 Open Cybersecurity Schema Framework (OSCF)
 is an open-source effort to create a common schema
@@ -48,3 +80,4 @@ See the
 
 ## What is OCSF Governance Model?
 See [OCSF Governance](https://github.com/ocsf/governance/blob/main/Governance.md)
+
