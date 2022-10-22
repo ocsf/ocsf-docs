@@ -1,12 +1,15 @@
+
+
+
 # Understanding the Open Cybersecurity Schema Framework
 
-Author: Paul Agbabian 
+Author: Paul Agbabian
 
-Date: August 2022
+Date: October 2022
 
 Status: RFC
 
-Version: 1.8
+Version: 1.9
 
 
 ## Introduction to the Framework and Schema
@@ -119,7 +122,7 @@ For all defined enumeration integer values, the label for the item also populate
 
 Reserved attributes are populated by a collection, processing or storage system and when defined within an event class are not populated by the producer or mapper personas.  Their names are prefixed with an underscore by convention.
 
-The reserved attributes are `_raw_data, _time, _uid`.  These attributes are discussed in subsequent sections.
+The core schema does not have any reserved attributes.
 
 
 ### Attribute Requirement Flags
