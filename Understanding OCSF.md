@@ -212,19 +212,17 @@ For example, an IP address may populate  multiple attributes: `public_ip, interm
 Further, there are other attributes that may also need to be surfaced from the same event, which is why `observables` is an array attribute of the base event class.  The interesting attributes of scalar or object data types are represented as strings, with an attribute type discriminator to indicate the original type:
 
 
-```
-"observables": [
-{
-"name": "actor_process",
-"type": "Process",
-"type_id": 25,
-"value": "Notepad.exe"
-},
-{
-"name": "file.name",
-"type": "File Name",
-"type_id": 7,
-"value": "Notepad.exe"
+```json
+"observables": [{
+    "name": "actor_process",
+    "type": "Process",
+    "type_id": 25,
+    "value": "Notepad.exe"
+},{
+    "name": "file.name",
+    "type": "File Name",
+    "type_id": 7,
+    "value": "Notepad.exe"
 }]
 ```
 
@@ -236,34 +234,26 @@ Enrichment is an object referenced by the primary base event array attribute `en
 
 Because enriching data can be extremely open-ended, the object uses generic string attributes along with a JSON `data` attribute that holds an arbitrary enrichment in a form known to the processing system.  Similar to the Observable object, `name` and `value` attributes are required to point to the event class attribute that is being enriched.  Unlike Observable, there is no predefined set of attributes that are tagged for enrichment, therefore only a recommended `type` attribute is specified (i.e. there is no `type_id` Enum).
 
-Also unlike Observable, which is synchronized with the time of the event, it is assumed that there is some latency between the event time and the time the event is enriched, hence the base event class `metadata`.`modified_time` should be populated at the time of enrichment.
+Also unlike Observable, which is synchronized with the time of the event, it is assumed that there is some latency between the event time and the time the event is enriched, hence the base event class `metadata.modified_time` should be populated at the time of enrichment.
 
-For example
+For example:
 
-
-```
-"metadata": {
-    "logged_time": 1659056959885810,
-    "modified_time": 1659056959885807,
-    "processed_time": 1659056959885796,
-    "sequence": 69,
-    "uid": "1310fc5c-0edb-11ed-88fc-0242ac110002",
-    "version": "0.11.0"
-},
-"enrichments": [
-{
-"data": {"hash": 0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494},
-"name": "ip",
-"provider": "media.defense.gov",
-"type": "IP Address",
-"value": "103.216.221.19"
-},
-{
-"data": {"yara_rule": wellmail_unique_strings \{ meta: description = "Rule for detection of WellMail based on unique strings contained in the binary" author = "NCSC" hash = "0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494" strings: $a = "C:\\Server\\Mail\\App_Data\\Temp\\agent.sh\\src" $b = "C:/Server/Mail/App_Data/Temp/agent.sh/src/main.go" $c = "HgQdbx4qRNv" $d = "042a51567eea19d5aca71050b4535d33d2ed43ba" $e = "main.zipit" $f = "@[^\\s]+?\\s(?P.*?)\\s" condition: uint32(0) == 0x464C457F and 3 of them \}"},
-"name": "ip",
-"provider": "media.defense.gov",
-"type": "IP Address",
-"value": "103.216.221.19"
+```json
+"enrichments": [{
+    "data": {
+        "hash": "0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494"
+    },
+    "name": "ip",
+    "provider": "media.defense.gov",
+    "type": "IP Address",
+    "value": "103.216.221.19"
+},{
+    "data": {
+    "yara_rule": "wellmail_unique_strings { meta: description = \"Rule for detection of WellMail based on unique strings contained in the binary\" author = \"NCSC\" hash = \"0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494\" strings: $a = \"C:\\Server\\Mail\\App_Data\\Temp\\agent.sh\\src\" $b = \"C:/Server/Mail/App_Data/Temp/agent.sh/src/main.go\" $c = \"HgQdbx4qRNv\" $d = \"042a51567eea19d5aca71050b4535d33d2ed43ba\" $e = \"main.zipit\" $f = \"@[^\\s]+?\\s(?P.*?)\\s\" condition: uint32(0) == 0x464C457F and 3 of them }"},
+    "name": "ip",
+    "provider": "media.defense.gov",
+    "type": "IP Address",
+    "value": "103.216.221.19"
 }]
 ```
 
@@ -320,7 +310,7 @@ The value is calculated as: `class_uid` `* 100 + activity_id`.  For example:
 A snippet of a File Activity event example is shown below.
 
 
-```
+```json
 {
    "category_uid": 1,
    "class_uid": 1004,
@@ -1098,10 +1088,10 @@ Choose a unique field you want to add, `uid` in the example above and populate i
 A sample .json object file,
 
 
-```
+```json
 {
-  "caption": "Vulnerability Details", // "previously name"
-  "name": "vulnerability", // "previously type"
+  "caption": "Vulnerability Details",
+  "name": "vulnerability",
   "description": "The vulnerability object describes details related to the observed vulnerability.",
   "extends": "object",
   "attributes": {
@@ -1114,7 +1104,6 @@ A sample .json object file,
     }
   }
 }
-
 ```
 
 
@@ -1131,10 +1120,10 @@ A sample .json object file,
 Sample entry in the dictionary,
 
 
-```
+```json
    "vulnerability": 
     {
-      "caption": "Vulnerability", // "previously name"
+      "caption": "Vulnerability",
       "description": "The vulnerability object describes details related to the observed vulnerability",
       "type": "vulnerability"
     }
