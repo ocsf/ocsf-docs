@@ -76,14 +76,14 @@ The MITRE ATT&CK Framework is widely used in the cybersecurity domain.  While th
 
 Categories are similar to Tactics, which have unique IDs.  Event Classes are similar to Techniques, which have unique IDs.  Profiles are similar to Matrices[^3], which have unique names.  Type IDs are similar to Procedures which have unique IDs.  Profiles can filter the Event Classes and Categories similar to how Matrices filter Techniques and Tactics.
 
-Differences from MITRE ATT&CK are that in OCSF, Event Classes are in only one Category, while MITRE ATT&CK Techniques can be part of multiple Tactics.  Similarly MITRE ATT&CK Procedures can be used in multiple Techniques.  MITRE ATT&CK has Sub-techniques while OCSF does not have Sub-Event Classes.[^4]
+Differences from MITRE ATT&CK are that in OCSF, Event Classes are in only one Category, while MITRE ATT&CK Techniques can be part of multiple Tactics. Similarly, MITRE ATT&CK Procedures can be used in multiple Techniques. MITRE ATT&CK has Sub-techniques while OCSF does not have Sub-Event Classes.[^4]
 
 OCSF is open and extensible by vendors, and end customers while the content within MITRE ATT&CK is released by MITRE.
 
 
 ## Attributes
 
-Attributes and the dictionary are the building blocks of a schema.  This section discusses OCSF attribute conventions, requirements, groupings, constraints, and some of the special attributes used in the core cybersecurity schema.
+Attributes and the dictionary are the building blocks of a schema.  This section discusses OCSF attribute conventions, requirements, groupings, constraints, and special attributes used in the core cybersecurity schema.
 
 In general, an attribute from the dictionary has the same meaning everywhere it is used in a schema.  Some attributes can have a meaning that is overloaded depending on the event class context where they are used.  In these cases the description of the attribute will be generic and include a ‘see specific usage’ instruction to override its description within the event class context rather than in the dictionary.
 
@@ -159,7 +159,7 @@ Attributes that are used for variations on typical use cases, to enhance the mea
 
 ### Timestamp Attributes
 
-Representing time values is one of the most important aspects of OCSF.  For an event schema it is even more important.  There are time attributes associated with events that need to be captured in a number of places throughout the schema, for example when a file was opened or when a process started and stopped.  There are also times that are directly related to the event stream, for example event creation, collection, processing, and logging.  The nominal data type for these attributes is `timestamp_t` based on Unix time or number of milliseconds since the Unix epoch.[^7]   The `datetime_t` data type represents times in human readable RFC3339 form.
+Representing time values is one of the most important aspects of OCSF.  For an event schema it is even more important.  There are time attributes associated with events that need to be captured in a number of places throughout the schema, for example when a file was opened or when a process started and stopped.  There are also times that are directly related to the event stream, for example event creation, collection, processing, and logging.  The nominal data type for these attributes is `timestamp_t` based on Unix time or number of milliseconds since the Unix epoch.[^7]   The `datetime_t` data type represents times in human-readable RFC3339 form.
 
 The following terms are used below:
 
@@ -174,7 +174,7 @@ Event Processor -- a system that processes and logs, including an ETL chain, the
 * `ref_time: string` \
 The original event time, as created by the event producer. The time format is not specified by OCSF. The time could be UTC time in milliseconds (1659378222123), ISO 8601 (2019-09-07T15:50-04:00), or any other value (12/13/2021 10:12:55 PM).
 * `_time`: `timestamp_t` \
-The normalized event occurrence time. Normalized time means the original event time `ref_time` was corrected for the clock skew and batch submission delay and after it was converted to the OCSF `timestamp_t`.
+The normalized event occurrence time. Normalized time means the original event time `ref_time` was corrected for the clock skew and batch submission delay, and after it was converted to the OCSF `timestamp_t`.
 * `processed_time: timestamp_t` \
 The time when the event (or batch of events) was sent by the event processor to the event consumer. The processed time can be used to determine the clock skew. Clock skew occurs when the clock time on one computer differs from the clock time on another computer.  It is assumed that the transport latency is very small compared to the clock skew, otherwise no correction should be made.
 * `logged_time: timestamp_t` \
@@ -194,7 +194,7 @@ The time zone where the event occurred is represented by the `timezone_offset` a
 
 ### Metadata
 
-Metadata is an object referenced by the primary required base event attribute `metadata`.  As its name implies, the attribute is populated with data outside of the source event.  Some of the attributes of the object are reserved, such as `logged_time` and _`uid`, while the `version` attribute is required - the schema version for the event.  It is expected that a logging system _may_ assign the `logged_time` and _`uid` at storage time.  Note that a reserved attribute may have any of the three requirement flags.
+Metadata is an object referenced by the primary required base event attribute `metadata`.  As its name implies, the attribute is populated with data outside the source event.  Some attributes of the object are reserved, such as `logged_time` and _`uid`, while the `version` attribute is required - the schema version for the event.  It is expected that a logging system _may_ assign the `logged_time` and _`uid` at storage time.  Note that a reserved attribute may have any of the three requirement flags.
 
 Metadata attributes such as `modified_time` and `processed_time` are optional.  `modified_time `is populated when an event has been enriched or mutated in some way before analysis or storage.  `processed_time `is populated typically when an event is collected or submitted to a logging system.[^8]
 
@@ -205,9 +205,9 @@ Extensions, discussed later, have their own versions and can change at their own
 
 ### Observables
 
-Observable is an object referenced by the primary base event array attribute `observables`.  It is populated from other attributes produced or mapped from the source event.  An Observable object (`observable`) surfaces in one place across any event while the security indicators that populate it may occur in many places across event classes.  In effect it is an array of summaries of those attributes regardless of where they stem from in the event based on their data type or object type (e.g. `ip_address`, `process`, `file` etc).
+Observable is an object referenced by the primary base event array attribute `observables`.  It is populated from other attributes produced or mapped from the source event.  An Observable object (`observable`) surfaces in one place across any event while the security indicators that populate it may occur in many places across event classes.  In effect, it is an array of summaries of those attributes regardless of where they stem from in the event based on their data type or object type (e.g. `ip_address`, `process`, `file` etc).
 
-For example, an IP address may populate  multiple attributes: `public_ip, intermediate_ips, ip `(as part of objects Endpoint, Device, Network Proxy, etc.).  An analyst may be interested to know if a particular IP address is present anywhere in any event.  Searching for the IP address value from the base event `observables` attribute surfaces any of these events more easily than remembering all of the attributes across all event classes that may have an IP address.
+For example, an IP address may populate  multiple attributes: `public_ip, intermediate_ips, ip `(as part of objects Endpoint, Device, Network Proxy, etc.).  An analyst may be interested to know if a particular IP address is present anywhere in any event.  Searching for the IP address value from the base event `observables` attribute surfaces any of these events more easily than remembering all the attributes across all event classes that may have an IP address.
 
 Further, there are other attributes that may also need to be surfaced from the same event, which is why `observables` is an array attribute of the base event class.  The interesting attributes of scalar or object data types are represented as strings, with an attribute type discriminator to indicate the original type:
 
@@ -280,7 +280,7 @@ Unfortunately, aside from inconsistent naming and typing of extracted fields, dr
 
 ### Base Event Class Attributes
 
-By convention, all event classes extend the Base Event event class.  Attributes of the base event class can be present in any event class and are termed Base Attributes.
+By convention, all event classes extend the Base Event class.  Attributes of the base event class can be present in any event class and are termed Base Attributes.
 
 The base event class has required, recommended, and optional attributes that apply to all core schema classes.  The required attributes, therefore, must be populated for every core schema event.  Individual event classes will add their own required and recommended attributes.  Optional base event class attributes may be included in any event class, along with event class-specific optional attributes.
 
@@ -499,7 +499,7 @@ Using profiles, some of these overlapping categorical scenarios can be handled w
 
 Multiple profiles can be added to an event class via an array of profile values in the `profiles` attribute.  This mix-in approach allows for reuse of event classes vs. creating new classes one by one that include the same attributes.  Event classes and instances of events that support the profile can be filtered via the `profiles` attribute across all categories.  
 
-For example, a `Malware` profile that adds MITRE ATT&CK and Malware objects to system activity classes avoids having to recreate a new event class, or many classes, with all of the same attributes as the system activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the security profile.  A `Host` profile and a `User` profile can add `Device`, `Process` and `User` objects to network activity event classes when the network activity log source is a user’s computer.  A cloud provider profile could mix-in cloud platform specific information onto network activity events.
+For example, a `Malware` profile that adds MITRE ATT&CK and Malware objects to system activity classes avoids having to recreate a new event class, or many classes, with all the same attributes as the system activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the security profile.  A `Host` profile and a `User` profile can add `Device`, `Process` and `User` objects to network activity event classes when the network activity log source is a user’s computer.  A cloud provider profile could mix-in cloud platform specific information onto network activity events.
 
 Proposals for three built-in profiles for `Malware`, `Host` and `User` are shown in the below table with their attributes.
 
@@ -739,7 +739,7 @@ Some exceptions can be made for well-accepted abbreviations. Example: `ip`, or n
 
 ## Appendix B - Data Types
 
-The predefined data types. The data type of a value specifies what kind of data that value can have.  Note type<sup>O</sup> denotes an observable type.  _t attributes in parentheses denote internal JSON schema type notation.
+The predefined data types. The data type of value specifies what kind of data that value can have.  Note type<sup>O</sup> denotes an observable type.  _t attributes in parentheses denote internal JSON schema type notation.
 
 
 <table>
@@ -995,25 +995,16 @@ The OCSF schema repository can be found at [https://github.com/ocsf/ocsf-schema]
 
 The repository is structure is as follows:
 
-categories.json
+    categories.json	-- the schema categories
+    dictionary.json	-- the schema dictionary
+    version.json	-- the schema version
+    enums		-- the schema enum defintions
+    events		-- the schema event classes
+    extensions	-- the schema extensions (future additions)
+    includes	-- the schema shared files
+    objects		-- the schema object defintions
+    profiles	-- the schema profiles
 
-dictionary.json
-
-ocsf-schema
-
-ocsf-schema/enums
-
-ocsf-schema/events
-
-ocsf-schema/extensions
-
-ocsf-schema/includes
-
-ocsf-schema/objects
-
-ocsf-schema/profiles
-
-ocsf-schema/templates
 
 The following is extracted from [CONTRIBUTING.md](https://github.com/ocsf/ocsf-schema/blob/a46b6df1d60ad052739caa96c29109e9b233ef82/CONTRIBUTING.md):
 
@@ -1026,60 +1017,43 @@ The following is extracted from [CONTRIBUTING.md](https://github.com/ocsf/ocsf-s
 2. Check the [dictionary](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) and the [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder, many of your desired attributes may already be present.
 3. Define the missing attributes → Adding a `field` , Adding an `object`.
 4. Determine which category you would want to add your event_class in, note it’s  `name`
-5. Create a new file →  `&lt;event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder. Template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/event_class_name.json)
+5. Create a new file →  `event_class_name.json` inside the category specific sub-folder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder. Template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/event_class_name.json)
 6. Define the `event_class` itself → Adding an `event_class`.
 7. Finally, verify the changes are working as expected in your local [ocsf-server](https://github.com/ocsf/ocsf-server).
 
 
----
-
-
 ### Adding/Modifying an `attribute`
-
-
 
 1. All the available `attributes` - `fields` & `objects` in OCSF are and will need to be defined in the attribute dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file and [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder if defining an object.
 2. Determine if a new attribute is required for your change, it might already be defined in the attribute dictionary and/or the [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder.
 3. Before adding a new attribute, review OCSF grammar & conventions || TASK - Add a grammar.md
 
 
-##### How to define a field in the dictionary?
+##### How to define a new attribute in the dictionary?
 
-To add a new field in OCSF, you need to define it in the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file as described below.
+To add a new attribute in OCSF, you need to define it in the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file as described below.
 
-Sample entry in the dictionary -
+Sample entry in the dictionary:
 
-
-```
+```json
    "uid": 
     {
-      "caption": "Unique ID", // "previously name"
+      "caption": "Unique ID",
       "description": "The unique identifier. See specific usage.",
       "type": "string_t"
     }
 ```
 
+Choose a unique attribute name you want to add.
 
-Choose a unique field you want to add, `uid` in the example above and populate it as described below.
-
-
-
-1. `caption` → Add a user friendly name to the field.
-2. `description` → Add concise description to define the attributes.
-    1. Note that `field` descriptions can be overridden in the `event_class/object`, therefore if it’s a common field (like name, label, uid etc) feel free to add a generic description, specific descriptions can be added in the `event_class/object` definition. For example,
-    2. A generic definition of `uid` in the dictionary -
-        1. `uid` : `The unique identifier. See specific usage.`
-    3. Specific description of `uid` in the `vulnerability` object -
-        2. `uid` : `Unique Identifier/s of the reported vulnerability. e.g. CVE ID/s"`
-3. `type` → Review OCSF data_types and ensure you utilize appropriate types while defining new fields. | not allowed to change...
-    4. All the available data_types can be accessed here || TASK - Create a data_types.md file in the repo
-    5. They are also accessible in your local instance of the ocsf-server - [http://localhost:8000/data_types](http://localhost:8000/data_types)
-4. `is_array` → This a boolean key:value pair that you would need to add if the field you are defining is an array.
-    6. e.g. `"is_array": true`
+1. `caption` → Add a user-friendly name to the attribute.
+2. `description` → Add concise description to define the attribute.
+   Note that the attribute's descriptions can be overridden in the event class or object, therefore if it’s a common field (like name, label, uid etc.) feel free to add a generic description, specific descriptions can be added in the event class or object definition. For example, a generic definition of `uid` in the dictionary: `The unique identifier. See specific usage.`, and a specific description of `uid` in the `vulnerability` object: `Unique identifier of the reported vulnerability. For example CVE ID."`.
+3. `type` → Review OCSF [data_types](https://schema.ocsf.io/data_types) and ensure you utilize appropriate types while defining new fields.
+4. `is_array` → This is a boolean flag that you would need to add if the field you are defining is an array. For example, `"is_array": true`.
 
 
 ##### How to define an object?
-
 
 
 1. All the available `objects` need to be defined as individual field entries in the dictionary, the [dictionary.json](https://github.com/ocsf/ocsf-schema/blob/main/dictionary.json) file and as distinct .json files in the [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder.
@@ -1108,14 +1082,13 @@ A sample .json object file,
 
 
 
-1. Create a new file → `&lt;object_name.json>` in [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder.
+1. Create a new file → `object_name.json` in [/objects](https://github.com/ocsf/ocsf-schema/tree/main/objects) folder.
 2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/object_name.json), to get started with .json file definition.
-3. `caption` → Add a user friendly name to the object
+3. `caption` → Add a user-friendly name to the object
 4. `description` → Add a concise description to define the object.
 5. `extends` → Ensure the value is `object` (All objects in OCSF extend a base definition of object)
 6. `name` → Add a unique name of the object
-7. `attributes` → Add the attributes that you want to define in the object,
-    1. `requirement` → For each attribute ensure you add a requirement value. Valid values are `optional`, `required`, `reserved`, `recommended`
+7. `attributes` → Add the attributes that you want to define in the object, and for each attribute ensure you add a `requirement` value. Valid values are `optional`, `required`, `recommended`
 
 Sample entry in the dictionary,
 
@@ -1133,12 +1106,10 @@ Sample entry in the dictionary,
 Choose a unique object you want to add, `vulnerability` in the example above and populate it as described below.
 
 
-
-1. `caption` → Add a user friendly name to the object
+1. `caption` → Add a user-friendly name to the object
 2. `description` → Add a concise description to define the object.
 3. `type` → Add the type of the object you are defining.
-4. `is_array` → This a boolean key:value pair that you would need to add if the object you are defining is an array.
-    1. e.g. `"is_array": true`
+4. `is_array` → This is a boolean flag that you would need to add if the object you are defining is an array. For example: `"is_array": true`.
 
 
 ---
@@ -1147,26 +1118,24 @@ Choose a unique object you want to add, `vulnerability` in the example above and
 ### Adding/Modifying an `event_class`
 
 
-
 1. All the available Event Classes are defined as .json files in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder.
 2. Review existing Event Classes, determine if a modification of the existing class would be sufficient or if there’s a need for a completely new event_class.
 3. To define a new class,
-    1. Create a new file →  `&lt;event_class_name.json>` inside the category specific subfolder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder.
-    2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/event_class_name.json), to get started with the .json definition.
-    3. `uid` → Select an integer in the range 0 - 99. Ensure the integer is unique within the category.
-        1. Note: Without `uid`, an event_class won’t be visible in the ocsf-server.
-    4. `caption` → Add a user friendly name to the event_class.
+    1. Create a new file →  `event_class_name.json` inside the category specific sub-folder in the [/events](https://github.com/ocsf/ocsf-schema/tree/main/events) folder.
+    2. Use the template available [here](https://github.com/ocsf/ocsf-schema/blob/main/templates/event_class_name.json), to get started with the `.json` definition.
+    3. `uid` → Select an integer in the range 0 - 99. Ensure the integer is unique within the category. Note: Without `uid`, an event_class won’t be visible in the ocsf-server.
+    4. `caption` → Add a user-friendly name to the event_class.
     5. `description` → Add a concise description to define the attributes.
     6. `name` → Add a unique name of the event_class. Ensure it matches the file name to maintain consistency.
     7. `extends` → Ensure the value is `base_event`.
-    8. `attributes` → Add the attributes that you want to define in the event_class,
-        2. `group` → For each attribute ensure you add a group value. Valid values are - `classification`, `context`, `occurrence`, `primary`
-        3. `requirement` → For each attribute ensure you add a requirement value. Valid values are `optional`, `required`, `reserved`, `recommended`
+    8. `attributes` → Add the attributes that you want to define in the event_class with the following properties: 
+       - `group` → For each attribute ensure you add a group value. Valid values are - `classification`, `context`, `occurrence`, `primary`.
+       - `requirement` → For each attribute ensure you add a requirement value. Valid values are `optional`, `required`, `recommended`.
 
 
 ### Extending the Schema
 
-To extend the schema create a new directory in the `schema/extensions` directory. The directory structure is the same as the top level schema directory and it may contain the following files and subdirectories:
+To extend the schema create a new directory in the `schema/extensions` directory. The directory structure is the same as the top level schema directory, and it may contain the following files and subdirectories:
 
 
 <table>
@@ -1213,7 +1182,7 @@ More information can be found at [extending-existing-class.md](https://github.co
      MITRE ATT&CK Matrix: https://attack.mitre.org/matrices/enterprise/
 
 [^4]:
-     The internal source definition of an OCSF schema can be hierarchical but the resulting compiled schema does not expose sub classes.
+     The internal source definition of an OCSF schema can be hierarchical but the resulting compiled schema does not expose subclasses.
 
 [^5]:
      Event class validation is enforced via the required attributes, in particular the classification attributes, which by necessity need to be kept to a minimum, as well as attribute data type validation and the event class structure
