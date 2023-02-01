@@ -6,9 +6,9 @@ Author: Paul Agbabian
 
 Date: December 2022
 
-Status: RFC
+Status: RFC - Corresponds to schema version 0.99.0 - RC
 
-Version: 1.10
+Version: 1.11
 
 
 ## Introduction to the Framework and Schema
@@ -60,9 +60,9 @@ The _attribute dictionary_ of all available attributes, and their types are the 
 
 Events in OCSF are represented by _event classes _which structure a set of attributes that attempt to describe the semantics of the event in detail.  An individual event is an instance of an event class.  Event classes have schema-unique IDs.  Individual events may have globally unique IDs.
 
-Each event class is grouped by category, and has a unique `category_uid` attribute value which is the category identifier.  Categories also have friendly name captions, such as System Activity, Network Activity, Security Findings, etc.  Event classes are grouped into categories for a number of purposes: a container for a particular event domain, documentation convenience and search, reporting, storage partitioning or access control to name a few.  
+Each event class is grouped by category, and has a unique `category_uid` attribute value which is the category identifier.  Categories also have friendly name captions, such as System Activity, Network Activity, Findings, etc.  Event classes are grouped into categories for a number of purposes: a container for a particular event domain, documentation convenience and search, reporting, storage partitioning or access control to name a few.  
 
-_Profiles_ overlay additional related attributes into event classes and objects** **allowing for cross-category event class augmentation and filtering.  Event classes register for profiles which can be optionally applied, or mixed into event classes and objects, by a producer or mapper.  For example, System Activity event classes may also include attributes for malware detection or vulnerability information when an endpoint security product is the data source.  Network Activity event classes from a host computer may carry the device, process and user associated with the activity.  A Malware profile or Host and User profiles can be applied in these cases. 
+_Profiles_ overlay additional related attributes into event classes and objects** **allowing for cross-category event class augmentation and filtering.  Event classes register for profiles which can be optionally applied, or mixed into event classes and objects, by a producer or mapper.  For example, System Activity event classes may also include attributes for malware detection or vulnerability information when an endpoint security product is the data source.  Network Activity event classes from a host computer may carry the device, process and user associated with the activity.  A Security Controls profile or Host profile can be applied in these cases. 
 
 Finally, _extensions_ allow the schema to be extended** **using the framework without modification of the core schema.  New attributes, objects, event classes, categories and profiles are all available to extensions.  Existing profiles can be applied to extensions, and new profiles can be applied to core event classes and objects as well as to other extensions.
 
@@ -93,7 +93,7 @@ OCSF adheres to naming conventions in order to more easily identify attributes w
 
 
 ```
-_id, _uid, _uuid, _ip, _name, _info, _time, _process, _ver
+_id, _uid, _uuid, _ip, _name, _info, _detail, _time, _dt, _process, _ver
 ```
 
 
@@ -101,14 +101,16 @@ Attribute names for values that are unique within the schema end with `_uid`.  C
 
 Attribute names for values that are globally unique end with _uuid.  They do not have friendly names.
 
-Attributes that refer to a source event literal value are prefixed with `ref_`.  For example, `ref_event_code`, `ref_time`, `ref_event_name`.
+Attributes that refer to a source event literal value are prefixed with `ref_`.  For example, `ref_event_code`, `ref_time`, `ref_event_name`.  
+
+Note: as of this writing, `ref_ `is not used in the core cybersecurity schema.
 
 
 #### Enum Attribute Conventions
 
 Attributes that are of an Enum integer type end with `_id`.  Enum constant identifiers are integers from a defined set where each has a friendly name label.
 
-By convention, every Enum type has two common values with integer value 0 for `Unknown` and -1 for `Other`.  
+By convention, every Enum type has two common values with integer value 0 for `Unknown` and 99 for `Other`.  
 
 If a source event has missing values that are required by the event class for that event, an `Unknown` value should be set for Enum types which is also the default.  
 
@@ -121,7 +123,7 @@ For all defined enumeration integer values, the label for the item also populate
 
 Reserved attributes are populated by a collection, processing or storage system and when defined within an event class are not populated by the producer or mapper personas.  Their names are prefixed with an underscore by convention.
 
-The core schema does not have any reserved attributes.
+Note: as of this writing the core schema does not have any reserved attributes.
 
 
 ### Attribute Requirement Flags
@@ -147,9 +149,9 @@ Some event classes may specify constraints on recommended attributes.  Constrain
 
 Attributes are grouped for documentation purposes into _Primary_, _Classification_, _Occurrence_, and _Context_ groups.  Classification and Occurrence groupings are independent of event class and are defined with the attribute in the dictionary.  Primary and Context attributes’ groupings are based on their usage within a given event class.
 
-Each event class has primary attributes, the attributes that are indicative of the event semantics in all use cases.  Primary attributes are typically Required, or Recommended per event class, based on their use in each class.  Primary attributes in the base event class apply to all event classes.
+Each event class has primary attributes, the attributes that are indicative of the event semantics in all use cases.  Primary attributes are typically Required, or Recommended per event class, based on their use in each class.  Primary attributes in the Base Event class apply to all event classes.
 
-Attributes that are important for the taxonomy of the framework are designated as Classification attributes.  The classification attributes are marked as Required as part of the base event class.
+Attributes that are important for the taxonomy of the framework are designated as Classification attributes.  The classification attributes are marked as Required as part of the Base Event class.  Their values are nominally `Unknown `or `Other `and will be overridden within specific event classes.
 
 Attributes that are related to time and time ranges are designated as Occurrence attributes.  The occurrence attributes may be marked with any requirement level, depending on their usage within an event class.
 
@@ -158,7 +160,9 @@ Attributes that are used for variations on typical use cases, to enhance the mea
 
 ### Timestamp Attributes
 
-Representing time values is one of the most important aspects of OCSF.  For an event schema it is even more important.  There are time attributes associated with events that need to be captured in a number of places throughout the schema, for example when a file was opened or when a process started and stopped.  There are also times that are directly related to the event stream, for example event creation, collection, processing, and logging.  The nominal data type for these attributes is `timestamp_t` based on Unix time or number of milliseconds since the Unix epoch.[^7]   The `datetime_t` data type represents times in human readable RFC3339 form.
+Representing time values is one of the most important aspects of OCSF.  For an event schema it is even more important.  There are time attributes associated with events that need to be captured in a number of places throughout the schema, for example when a file was opened or when a process started and stopped.  There are also times that are directly related to the event stream, for example event creation, collection, processing, and logging.  The nominal data type for these attributes is `timestamp_t` based on Unix time or number of milliseconds since the Unix epoch.   The `datetime_t` data type represents times in human readable RFC3339 form.
+
+The Date/Time profile adds a sibling attribute of data type `datetime_t `wherever a `timestamp_t `attribute appears in the schema.
 
 The following terms are used below:
 
@@ -170,9 +174,9 @@ Event Processor -- a system that processes and logs, including an ETL chain, the
 
 
 
-* `ref_time: string` \
-The original event time, as created by the event producer. The time format is not specified by OCSF. The time could be UTC time in milliseconds (1659378222123), ISO 8601 (2019-09-07T15:50-04:00), or any other value (12/13/2021 10:12:55 PM).
-* `time`: `timestamp_t` \
+* `original_time: string` \
+The original event time, as created by the event producer as part of the Metadata object of the Base Event class. The time format is not specified by OCSF. The time could be UTC time in milliseconds (1659378222123), ISO 8601 (2019-09-07T15:50-04:00), or any other value (12/13/2021 10:12:55 PM).
+* `time`:` timestamp_t` \
 The normalized event occurrence time. Normalized time means the original event time `ref_time` was corrected for the clock skew and batch submission delay and after it was converted to the OCSF `timestamp_t`.
 * `processed_time: timestamp_t` \
 The time when the event (or batch of events) was sent by the event processor to the event consumer. The processed time can be used to determine the clock skew. Clock skew occurs when the clock time on one computer differs from the clock time on another computer.  It is assumed that the transport latency is very small compared to the clock skew, otherwise no correction should be made.
@@ -181,40 +185,40 @@ The time when the event consumer logged the event. It must be equal or greater t
 * `modified_time: timestamp_t` \
 The time when the event was last updated or enriched.  It must be equal or greater than the event time. It could be less-than, equal, or greater-than the `logged_time` .
 * `start_time/end_time: timestamp_t` \
-The start and end event times are used when the event represents some activity that happened over time, for example a vulnerability or virus scan. The other use-case is event aggregation. Aggregation is a mechanism that allows for a high number of events of the same event type that are raised to be summarized into one for more efficient processing. For example netflow events.  In this use case, the `count` integer attribute is also populated.
+The start and end event times of the Base Event class are used when the event represents some activity that happened over a time range, for example a vulnerability or virus scan. The other use-case is event aggregation. Aggregation is a mechanism that allows for a number of events of the same event type to be summarized into one for more efficient processing. For example netflow events.  In this use case, the `count` integer attribute is also populated.
 
 
 #### Time Zone
 
-The time zone where the event occurred is represented by the `timezone_offset` attribute of data type Integer.  Although time attributes are otherwise UTC except for the pass through attribute ref_time, most security use cases benefit from knowing what time of day the event occurred at the event source.
+The time zone where the event occurred is represented by the `timezone_offset` attribute of data type Integer.  Although time attributes are otherwise UTC except for the pass through attribute original_time, most security use cases benefit from knowing what time of day the event occurred at the event source.
 
-`timezone_offset` is the number of minutes that the reported event time is ahead or behind UTC, in the range -1,080 to +1,080.  It is a recommended attribute of the base event class, discussed next.
+`timezone_offset` is the number of minutes that the reported event time is ahead or behind UTC, in the range -1,080 to +1,080.  It is a recommended attribute of the Base Event class.
 
 
 ### Metadata
 
-Metadata is an object referenced by the primary required base event attribute `metadata`.  As its name implies, the attribute is populated with data outside of the source event.  Some of the attributes of the object are optional, such as `logged_time` and `uid`, while the `version` attribute is required - the schema version for the event.  It is expected that a logging system _may_ assign the `logged_time` and `uid` at storage time.
+Metadata is an object referenced by the required Base Event attribute `metadata`.  As its name implies, the attribute is populated with data outside of the source event.  Some of the attributes of the object are optional, such as `logged_time` and `uid`, while the `version` attribute is required - the schema version for the event.  It is expected that a logging system _may_ assign the `logged_time` and `uid` at storage time.
 
-Metadata attributes such as `modified_time` and `processed_time` are optional.  `modified_time `is populated when an event has been enriched or mutated in some way before analysis or storage.  `processed_time `is populated typically when an event is collected or submitted to a logging system.[^8]
+Metadata attributes such as `modified_time` and `processed_time` are optional.  `modified_time `is populated when an event has been enriched or mutated in some way before analysis or storage.  `processed_time `is populated typically when an event is collected or submitted to a logging system.[^7]
 
-**Version.**  OCSF core schema version uses Semantic Versioning Specification (SemVer), e.g. `0.11.0,` which indicates to consumers of the event which attributes may be found in the event, and what the class and category structure are.  The convention is that the major version, after `1.0.0`, or first part, remains the same while versions of the schema remain backwards compatible with previous versions of the schema and framework.  As new classes, attributes, objects and profiles are added to the schema, the minor version, or second part of the version increases.  The third part is reserved for corrections that don’t break the schema, for example documentation or caption changes.
+**Version.**  OCSF core schema version uses Semantic Versioning Specification (SemVer), e.g. `0.99.0,` which indicates to consumers of the event which attributes may be found in the event, and what the class and category structure are.  The convention is that the major version, after `1.0.0`, or first part, remains the same while versions of the schema remain backwards compatible with previous versions of the schema and framework.  As new classes, attributes, objects and profiles are added to the schema, the minor version, or second part of the version increases.  The third part is reserved for corrections that don’t break the schema, for example documentation or caption changes.
 
 Extensions, discussed later, have their own versions and can change at their own pace but must remain compatible and consistent with the major version of the core schema that they extend.
 
 
 ### Observables
 
-Observable is an object referenced by the primary base event array attribute `observables`.  It is populated from other attributes produced or mapped from the source event.  An Observable object (`observable`) surfaces in one place across any event while the security indicators that populate it may occur in many places across event classes.  In effect it is an array of summaries of those attributes regardless of where they stem from in the event based on their data type or object type (e.g. `ip_address`, `process`, `file` etc).
+Observable is an object referenced by the primary Base Event class array attribute `observables`.  It is populated from other attributes produced or mapped from the source event.  An Observable object surfaces attribute information in one place irrespective of event class, while the security relevant indicators that populate it may occur in many places across event classes.  In effect it is an array of summaries of those attributes regardless of where they stem from in the event based on their data type or object type (e.g. `ip_address`, `process`, `file` etc).
 
-For example, an IP address may populate  multiple attributes: `public_ip, intermediate_ips, ip `(as part of objects Endpoint, Device, Network Proxy, etc.).  An analyst may be interested to know if a particular IP address is present anywhere in any event.  Searching for the IP address value from the base event `observables` attribute surfaces any of these events more easily than remembering all of the attributes across all event classes that may have an IP address.
+For example, an IP address may populate  multiple attributes: `public_ip, intermediate_ips, ip `(as part of objects Endpoint, Device, Network Proxy, etc.).  An analyst may be interested to know if a particular IP address is present anywhere in any event.  Searching for the IP address value from the Base Event `observables` attribute surfaces any of these events more easily than remembering all of the attributes across all event classes that may have an IP address.
 
-Further, there are other attributes that may also need to be surfaced from the same event, which is why `observables` is an array attribute of the base event class.  The interesting attributes of scalar or object data types are represented as strings, with an attribute type discriminator to indicate the original type:
+Further, there are other attributes (or many IP addresses) that may also need to be surfaced from the same event, which is why `observables` is an array attribute of the Base Event class.  The interesting attributes of scalar or object data types are represented as strings, with an attribute type discriminator to indicate the original type:
 
 
 ```
 "observables": [
 {
-"name": "actor_process",
+"name": "actor.process",
 "type": "Process",
 "type_id": 25,
 "value": "Notepad.exe"
@@ -231,11 +235,11 @@ Further, there are other attributes that may also need to be surfaced from the s
 
 ### Enrichments
 
-Enrichment is an object referenced by the primary base event array attribute `enrichments`.  An Enrichment object (`enrichment`) describes additional information added to the event during collection or event processing but before an immutable operation such as storage of the event.  An example would be looking up location data on an IP address, or IOCs against a domain name or file hash.
+Enrichment is an object referenced by the Base Event array attribute `enrichments`.  An Enrichment object describes additional information added to the event during collection or event processing but before an immutable operation such as storage of the event.  An example would be looking up location data on an IP address, or IOCs against a domain name or file hash.
 
 Because enriching data can be extremely open-ended, the object uses generic string attributes along with a JSON `data` attribute that holds an arbitrary enrichment in a form known to the processing system.  Similar to the Observable object, `name` and `value` attributes are required to point to the event class attribute that is being enriched.  Unlike Observable, there is no predefined set of attributes that are tagged for enrichment, therefore only a recommended `type` attribute is specified (i.e. there is no `type_id` Enum).
 
-Also unlike Observable, which is synchronized with the time of the event, it is assumed that there is some latency between the event time and the time the event is enriched, hence the base event class `metadata`.`modified_time` should be populated at the time of enrichment.
+Also unlike Observable, which is synchronized with the time of the event, it is assumed that there is some latency between the event time and the time the event is enriched, hence the Base Event class `metadata`.`modified_time` should be populated at the time of enrichment.
 
 For example
 
@@ -247,7 +251,7 @@ For example
     "processed_time": 1659056959885796,
     "sequence": 69,
     "uid": "1310fc5c-0edb-11ed-88fc-0242ac110002",
-    "version": "0.11.0"
+    "version": "0.99.0"
 },
 "enrichments": [
 {
@@ -270,45 +274,41 @@ For example
 
 ## Event Classes
 
-**Events are represented by instances of Event Classes**, which are a particular set of attributes and objects representing a log line or telemetry submission at a point in time.  Event classes have semantics that describe what happened, either a particular activity, disposition or both.  
-
-Each event class has a unique `class_uid` attribute value which is the event class identifier.  Event class friendly names populate the `class_name` attribute and are descriptive of some type of activity, such as File Access Activity or Process Activity.  
-
-The semantics of the class are defined by the specific activity, via the `activity_id` attribute, such as File Opened or Process Started.  Other attributes of the class indicate the details such as the file name, or the process name.  
-
-**Every event class has an activity, disposition or outcome**, via the `activity_id` and `disposition_id` Enum attributes, constrained to the values appropriate for each event class.  The `activity_id `indicates what specific activity the event is reporting.  The `disposition_id` indicates what the outcome or state of the activity was at the time of event capture.  
-
-Not all event classes have a `disposition_id `but all have an `activity_id.` A typical use of `disposition_id` is when a security protection product detects a threat and blocks it.  The activity might have been a file open, but if the file was infected, the disposition would be that the file open was blocked.
-
-The unique combination of a `class_uid` and `activity_id` or `disposition_id` is represented by the `type_uid` derived attribute.  When `disposition_id` is populated as part of an event class it is used rather than `activity_id `as it is more representative of what happened during the activity.
+**Events are represented by instances of Event Classes**, which are particular sets of attributes and objects representing a log line or telemetry submission at a point in time.  Event classes have semantics that describe what happened: either a particular activity, disposition or both.  
 
 It is the intent of the schema to allow for the mapping of any raw event to a single event class.  This is achieved by careful design using composition rather than a multiple inheritance approach.  In order to completely capture the information in a rich data source, many attributes may be required.
 
-Unfortunately, aside from inconsistent naming and typing of extracted fields, driving the need for normalization, not every data source emits the same information for the same observed behavior.  In the interest of consistency, accuracy and precision, the schema event classes specify which dictionary attributes are essential, (recommended or required), while others are optional as not all are needed across different data sources.  Attribute requirements are always within the scope of the event class definition and not tied to the attributes themselves.
+Unfortunately, not every data source emits the same information for the same observed behavior.  In the interest of consistency, accuracy and precision, the schema event classes specify which dictionary attributes are essential, (recommended or required), while others are optional as not all are needed across different data sources.  Attribute requirements, aside from Classification attributes from the Base Event class, are always within the scope of the event class definition and not tied to the attributes themselves.  
+
+By convention, all event classes extend the Base Event event class.  Attributes of the Base Event class can be present in any event class and are termed Base Attributes.
 
 
 ### Base Event Class Attributes
 
-By convention, all event classes extend the Base Event event class.  Attributes of the base event class can be present in any event class and are termed Base Attributes.
+The Base Event class has required, recommended, and optional attributes that apply to all core schema classes.  The required attributes must be populated for every core schema event.  Optional Base Event class attributes may be included in any event class, along with event class-specific optional attributes.  Individual event classes will include their own required and recommended attributes.
 
-The base event class has required, recommended, and optional attributes that apply to all core schema classes.  The required attributes, therefore, must be populated for every core schema event.  Individual event classes will add their own required and recommended attributes.  Optional base event class attributes may be included in any event class, along with event class-specific optional attributes.
+Examples of required base attributes are `class_uid`, `category_uid`, `activity_id`, `severity_id`.
 
-Examples of required base attributes are `class_uid`, `category_uid`, `severity_id`.
+Examples of recommended base attributes are `timezone_offset, status_id,message.`
 
-Examples of recommended base attributes are `timezone_offset, status_id / status, product.`
+Examples of optional base attributes are `activity_name`, `start_time`, `end_time`, `count`, `duration`, `unmapped`.
 
-Examples of optional base attributes are, `start_time`, `end_time`, `count`, `duration`, `unmapped`.
+**Each event class has a unique <code>class_uid</code></strong> attribute value which is the event class identifier.  It is a required attribute whose value overrides the nominal Base Event class value of <code>99</code>.  Event class friendly names are defined by the schema, optionally populate the <code>class_name</code> attribute and are descriptive of the specific class, such as File System Activity or Process Activity.
+
+**Every event class has a <code>category_uid </code></strong>attribute value which indicates which OCSF Category the class belongs to.  An event class may be of only one category.  Category friendly names are defined by the schema, optionally populate the <code>category_name</code> attribute and are descriptive of the specific category the class belongs to, such as System Activity or Network Activity.
+
+**Every event class has an <code>activity_id </code></strong>Enum attribute, constrained to the values appropriate for each event class.  The semantics of the class are further defined by the <code>activity_id</code> attribute, such as Open for File System Activity or Launch for Process Activity.  By convention, <code>activity_id </code>Enum labels are present tense imperatives.  The Enum label optionally may populate the <code>activity_name </code>attribute, which is a sibling to the <code>activity_id </code>Enum attribute but as a Classification group attribute, follows the <code>_name </code>suffix convention.
 
 
 ### Special Base Attributes
 
-There are a few base attributes that are worth calling out specifically.  These are the `unmapped` attribute, the _`raw_data` attribute and the `type_uid `attribute.
+There are a few base attributes that are worth calling out specifically.  These are the `unmapped` attribute, the `raw_data` attribute and the `type_uid `attribute.
 
 While most if not all fields from a raw event can be parsed and tokenized, not all are mapped to the schema.  The fields that are not mapped may be included with the event in the optional `unmapped` attribute.
 
-The _`raw_data` attribute holds the event data as received from the source.  It is unparsed and represented as a String type.
+The `raw_data` optional attribute holds the event data as received from the source.  It is unparsed and represented as a String type.
 
-The `type_uid` attribute is constructed by the combination of the event class of the event (`class_uid)`and its activity (`activity_id`) or disposition (`disposition_id`).  It is unique across the schema hence it has a `_uid` suffix.  The `type_uid` friendly name, `type_name,` is a way of identifying the event in a more readable and complete way.  It too is a combination of the names of the two component parts.  
+The `type_uid` required attribute is constructed by the combination of the event class of the event (`class_uid)`and its activity (`activity_id`).  It is unique across the schema hence it has a `_uid` suffix.  The `type_uid` friendly name, `type_name,` is a way of identifying the event in a more readable and complete way.  It too is a combination of the names of the two component parts.  
 
 The value is calculated as: `class_uid` `* 100 + activity_id`.  For example:
 
@@ -335,6 +335,13 @@ A snippet of a File Activity event example is shown below.
 
 
 
+### Disposition
+
+The `disposition_id` attribute indicates the outcome or state of the event class’ activity at the time of event capture and is an Enum with a standard set of values, such as Blocked, Quarantined, Deleted, Delayed.  
+
+Not all event classes have a `disposition_id `but all have an `activity_id.` A typical use of `disposition_id` is when a security protection product detects a threat and blocks it.  The activity might have been a file open, but if the file was infected, the disposition would be that the file open was blocked.  As of this writing, `disposition_id `is added to classes via the Security Controls profile.
+
+
 ### Constraints
 
 A _Constraint_ is a documented rule subject to validation that requires at least one of the specified recommended attributes of a class to be populated.  Constraints are used in classes where there are attributes that cannot be required in all use cases, but in order to have unambiguous meaning, at least one of the attributes in the constraint is required.  Attributes in a constraint must be Recommended.
@@ -342,7 +349,7 @@ A _Constraint_ is a documented rule subject to validation that requires at least
 
 ## Categories
 
-**A Category organizes event classes that represent a particular domain.  **For example, a category can include event classes for different kinds of events that may be found in an access log, or audit log, or network and system events.  Each category has a unique category_uid attribute value which is the category identifier.  Category IDs also have category_name friendly name attributes, such as System Activity, Network Activity, Audit, etc.
+**A Category organizes event classes that represent a particular domain.  **For example, a category can include event classes for different kinds of events that may be found in an access log, or audit log, or network and system events.  Each category has a unique `category_uid `attribute value which is the category identifier.  Category IDs also have `category_name `friendly name attributes, such as System Activity, Network Activity, Audit, etc.
 
 An example of categories with some of their event classes is shown in the below table.  Note, these are not final.
 
@@ -357,8 +364,6 @@ An example of categories with some of their event classes is shown in the below 
    </td>
    <td><strong>Findings </strong>
    </td>
-   <td><strong>Cloud Activity</strong>
-   </td>
   </tr>
   <tr>
    <td>File System Activity
@@ -368,8 +373,6 @@ An example of categories with some of their event classes is shown in the below 
    <td>Account Change
    </td>
    <td>Security Finding
-   </td>
-   <td>Cloud API
    </td>
   </tr>
   <tr>
@@ -381,8 +384,6 @@ An example of categories with some of their event classes is shown in the below 
    </td>
    <td>
    </td>
-   <td>Cloud Storage Activity
-   </td>
   </tr>
   <tr>
    <td>Kernel Activity
@@ -393,17 +394,13 @@ An example of categories with some of their event classes is shown in the below 
    </td>
    <td>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Memory Activity
    </td>
    <td>DHCP Activity
    </td>
-   <td>Entity Management Audit
-   </td>
-   <td>
+   <td>Entity Management 
    </td>
    <td>
    </td>
@@ -413,9 +410,7 @@ An example of categories with some of their event classes is shown in the below 
    </td>
    <td>RDP Activity
    </td>
-   <td>
-   </td>
-   <td>
+   <td>API Activity
    </td>
    <td>
    </td>
@@ -425,9 +420,7 @@ An example of categories with some of their event classes is shown in the below 
    </td>
    <td>SMB Activity
    </td>
-   <td>
-   </td>
-   <td>
+   <td>Access Activity
    </td>
    <td>
    </td>
@@ -436,8 +429,6 @@ An example of categories with some of their event classes is shown in the below 
    <td>Process Activity
    </td>
    <td>SSH Activity
-   </td>
-   <td>
    </td>
    <td>
    </td>
@@ -453,15 +444,11 @@ An example of categories with some of their event classes is shown in the below 
    </td>
    <td>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Registry Value Activity
    </td>
-   <td>RFB Activity
-   </td>
-   <td>
+   <td>SMTP Activity
    </td>
    <td>
    </td>
@@ -471,9 +458,7 @@ An example of categories with some of their event classes is shown in the below 
   <tr>
    <td>Resource Activity
    </td>
-   <td>SMTP Activity
-   </td>
-   <td>
+   <td>Email Activity
    </td>
    <td>
    </td>
@@ -492,20 +477,20 @@ Using profiles, some of these overlapping categorical scenarios can be handled w
 
 ## Profiles
 
-**Profiles are overlays on event classes and objects, **effectively a dynamic mix-in class of attributes with their requirements and constraints.  While event classes specialize their category domain, a profile can augment existing event classes with a set of attributes independent of category.  Attributes that must or may occur in any event class are members of the base event class.  Attributes that are specialized for selected classes are members of a profile.
+**Profiles are overlays on event classes and objects, **effectively a dynamic mix-in class of attributes with their requirements and constraints.  While event classes specialize their category domain, a profile can augment existing event classes with a set of attributes independent of category.  Attributes that must or may occur in any event class are members of the Base Event class.  Attributes that are specialized for selected classes are members of a profile.
 
 Multiple profiles can be added to an event class via an array of profile values in the optional `profiles` attribute of the Base Event class.  This mix-in approach allows for reuse of event classes vs. creating new classes one by one that include the same attributes.  Event classes and instances of events that support the profile can be filtered via the `profiles` attribute across all categories and event classes, forming another dimension of classification.
 
-For example, a `Malware` profile that adds MITRE ATT&CK and Malware objects to System Activity classes avoids having to recreate a new event class, or many classes, with all of the same attributes as the System Activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the `Malware `profile.  A `Host` profile can add `Device`, and `Actor `objects to Network Activity event classes when the network activity log source is a user’s computer.  Note that the `Actor `object includes `Process `and `User `objects, so a Host profile can include all of these when applied.  A cloud provider profile could mix-in cloud platform specific information onto network activity events.
+For example, a `Security Controls `profile that adds MITRE ATT&CK and Malware objects to System Activity classes avoids having to recreate a new event class, or many classes, with all of the same attributes as the System Activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the `Malware `profile.  A `Host` profile can add `Device`, and `Actor `objects to Network Activity event classes when the network activity log source is a user’s computer.  Note that the `Actor `object includes `Process `and `User `objects, so a Host profile can include all of these when applied.  A Cloud profile could mix-in cloud platform specific information onto Network Activity events.
 
-The profiles attribute is an optional attribute of the Base Event class.  The absence of the profiles attribute means no profile attributes are added as would be expected.  However some classes, such as System Activity classes, build-in the attributes of a profile, for example the `Host `profile attributes `device `and `actor`.  Therefore, the `profiles `attribute is overridden for these classes to be Required, rather than Optional.
+The `profiles `attribute is an optional attribute of the Base Event class.  The absence of the `profiles `attribute means no profile attributes are added as would be expected.  However some classes, such as System Activity classes, build-in the attributes of a profile, for example the `Host `profile attributes `device `and `actor`.  Therefore, the `profiles `attribute is overridden for these classes to be Required, rather than Optional.
 
 Proposals for three built-in profiles for `Malware`, `Host` and `User` are shown in the below table with their attributes.
 
 
 <table>
   <tr>
-   <td><strong>Malware Profile</strong>
+   <td><strong>Security Controls Profile</strong>
    </td>
    <td><strong>Host Profile</strong>
    </td>
@@ -525,7 +510,7 @@ Proposals for three built-in profiles for `Malware`, `Host` and `User` are shown
    </td>
    <td><code>actor</code>
    </td>
-   <td>
+   <td><code>api</code>
    </td>
   </tr>
   <tr>
@@ -539,9 +524,9 @@ Proposals for three built-in profiles for `Malware`, `Host` and `User` are shown
 </table>
 
 
-Other profiles could be product oriented, such as Firewall, IDS, VA, DLP etc. if they need to add attributes to existing classes.  They can also be more general, platform oriented, such as for cloud or Windows environments.
+Other profiles could be product oriented, such as Firewall, IDS, VA, DLP etc. if they need to add attributes to existing classes.  They can also be more general, platform oriented, such as for Mac, Linux or Windows environments.
 
-For example, AWS services log events with an ARN (AWS Resource Name) and an AWS IAM Account.  An AWS specific profile can be added to any event class or category of classes that includes arn and IAM account attributes.  Splunk Technical Add-ons would define a profile that would be added to all events with Splunk’s standard source, sourcetype, host, attributes.
+For example, Splunk Technical Add-ons would define a profile that would be added to all events with Splunk’s standard `source`, `sourcetype`, `host` attributes.
 
 
 ### Profile Application Examples 
@@ -551,24 +536,24 @@ Using example categories and event classes from a preceding section, examples of
 
 #### System Activity
 
-The event classes **would** all include the Host profile and **may** include the Malware or Cloud profile.
+The event classes **would** all include the Host profile and **may** include the Security Controls or Cloud profile.
 
 
 #### Network Activity
 
-The event classes **may** include the Host profile and **may** include the Malware or Cloud profile.
+The event classes **may** include the Host profile and **may** include the Security Controls or Cloud profile.
 
 
 #### Audit Activity
 
-The event classes **would** include the Host profile, (due to actor.user), **may **include the Cloud profile, and **would not** include the Malware profile.
+The event classes **would** include the Host profile, (due to actor.user), **may **include the Cloud profile, and **would not** include the Security Controls profile.
 
 
 ### Personas and Profiles
 
 The personas called out in an earlier section, producer, author, mapper, analyst, all can consider the profile from a different perspective.
 
-Producers, who can also be authors, can add profiles to their events when the events will include the additional information the profile adds.  For example a vendor may have certain system attributes that are added via an extension profile.  A network vendor that can detect malware would apply the Malware profile to their events.  An endpoint security vendor can apply the Host, User and Malware profile to network events.
+Producers, who can also be authors, can add profiles to their events when the events will include the additional information the profile adds.  For example a vendor may have certain system attributes that are added via an extension profile.  A network vendor that can detect malware would apply the Security Controls profile to their events.  An endpoint security vendor can apply the Host, User and Security Controls profile to network events.
 
 Authors define profiles, and the profiles are applicable to specific classes, objects or categories.
 
@@ -581,9 +566,9 @@ Analysts, e.g. end users, can use the browser to select applicable profiles at t
 
 OCSF schemas can be extended by adding new attributes, objects, categories, profiles and event classes.  A schema is the aggregation of core schema entities and extensions.  
 
-Extensions allow a particular vendor or customer to create a new schema or augment an existing schema.[^9]  Extensions can also be used to factor out non-essential schema domains keeping a schema small.  Extensions to the core schema use the framework in the same way as a new schema, optionally creating categories, profiles or event classes from the dictionary.  Extensions can add new attributes to the dictionary, including new objects.  Extended attribute names can be the same as core schema names but this is not a good practice for a number of reasons.  As with categories, event classes and profiles, extensions have unique IDs within the framework as well as versioning.[^10]
+Extensions allow a particular vendor or customer to create a new schema or augment an existing schema.[^8]  Extensions can also be used to factor out non-essential schema domains keeping a schema small.  Extensions to the core schema use the framework in the same way as a new schema, optionally creating categories, profiles or event classes from the dictionary.  Extensions can add new attributes to the dictionary, including new objects.  Extended attribute names can be the same as core schema names but this is not a good practice for a number of reasons.  As with categories, event classes and profiles, extensions have unique IDs within the framework as well as versioning.[^9]
 
-One use of extensions to the core schema is the development of new schema artifacts, which later may be promoted into the core schema.  Another use of extensions is to add vendor specific extensions to the core schema.  In this case, a best practice is to prefix the schema artifacts with a short identifier associated with the extension range registered.[^11]  Lastly, as mentioned above, entirely new schemas can be constructed as extensions.
+One use of extensions to the core schema is the development of new schema artifacts, which later may be promoted into the core schema.  Another use of extensions is to add vendor specific extensions to the core schema.  In this case, a best practice is to prefix the schema artifacts with a short identifier associated with the extension range registered.[^10]  Lastly, as mentioned above, entirely new schemas can be constructed as extensions.
 
 Examples of new experimental categories, new event classes that contain some new attributes and objects are shown in the table below with a `Dev` extension superscript convention.  In the example, extension classes were added to the core Findings category, and three extension categories were added, Policy, Remediation and Diagnostic, with extension classes.
 
@@ -673,10 +658,10 @@ A brief discussion of how to extend the schema is found in Appendix C.
 For example, use `events_per_sec` rather than `event_per_sec`. 
 * When an attribute represents multiple entities, the attribute name should be pluralized and the value type should be an array.  \
 Example: `process.loaded_modules` includes multiple values -- a loaded module names list. 
-* Avoid repetition of words.  \
-Example: `host.host_ip` should be `host.ip`. 
+* Avoid repetition of words where possible.  \
+Example: `device.device_ip` should be `device.ip`. 
 * Avoid abbreviations when possible.  \
-Some exceptions can be made for well-accepted abbreviations. Example: `ip`, or names such as `os`, `geo`. 
+Some exceptions can be made for well-accepted abbreviations. Example: `ip`, or `os`. 
 * For vendor extensions to the dictionary, prefix attribute names with a 3-letter moniker in order to avoid name collisions.  Example: `aws_finding, spk_context_ids`.
 
 
@@ -1075,19 +1060,16 @@ More information about extending existing schema artifacts can be found at [exte
      Event class validation is enforced via the required attributes, in particular the classification attributes, which by necessity need to be kept to a minimum, as well as attribute data type validation and the event class structure
 
 [^6]:
-     Required attributes that cannot be populated due to information missing from a data source must be carried with the event as _unknown_ values - asserting that the information was missing.  Required attributes that are mapped from a source event (rather than produced natively) may also be populated by a collection or processing system, most notably the schema `version` attribute of the `metadata` attribute’s object.
+     Required attributes that cannot be populated due to information missing from a data source must be carried with the event as _unknown_ values - asserting that the information was missing.
 
 [^7]:
-     Timestamp_ex profile adds sibling attributes to timestamp_t attributes based on RFC3339 text format.
+     Note that a non-trivial difference between the processed_time and the logged_time in UTC may indicate a clock synchronization problem with the source of the event (but not necessarily the actual source of the event if there  is an intermediate collection system or forwarder).
 
 [^8]:
-     Note that a non-trivial difference between the processed_time and the logged_time in UTC may indicate a clock synchronization problem with the source of the event (and not necessarily the event source in the event there is an intermediate collection system or forwarder).
-
-[^9]:
      An extension does not need to extend the core schema base class if it is a new schema.
 
-[^10]:
+[^9]:
      Reserved identifier ranges are registered within a file in the project GitHub repository.  Extended events should populate the `metadata.version` attribute with the extended schema version.
 
-[^11]:
+[^10]:
      The Schema Browser will label extensions with a superscript.
