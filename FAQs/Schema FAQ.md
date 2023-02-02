@@ -52,7 +52,22 @@ The Actor object is intended for use in event classes when knowledge of one enti
 
 From a structural standpoint, the `actor` attribute avoids name collisions with the other end of the activity in cases where a process acts on another process, as those attribute names would be in contention at the same level within the class.
 
-Currently the Actor object has a `process` and `user` attribute, where usually one or the other is in the role of the actor in the activity.
+Currently the Actor object has a `process` and `user` attribute, where one or the other is in the role of the actor in the activity.  It also has Optional attributes for User Session, a sibling to User (not Process), `authorizations`, `idp`, and `invoked_by`.
+
+The `idp` is populated in Audit category event classes, when the actor's identity provider is known and logged with Authentication and related events.
+
+The `authorizations` attribute is an array of information pertaining to what permissions and privileges the actor has at the time of the event, if known.
+
+The `invoked_by` attribute is populated with the name of the service or application through which the actor's activity was initiated.
+
+---
+
+## When should I use the session attribute?
+The `session` attribute is usually paired with the `user` attribute.  A Session object has information pertaining to a particular user session through which the activity was initiated.  User is an entity object that isn't always associated with a session, and isn't always an actor, hence Session isn't part of the User object, but is included with the Actor object for actor semantics.
+
+Related to this, the `process` attribute of type Process has a User object which represents the user's account that the process runs under or is impersonating.  Hence, the Process object also has a `session` attribute.
+
+Often, User and Session objects will be paired in many event classes.
 
 ---
 
