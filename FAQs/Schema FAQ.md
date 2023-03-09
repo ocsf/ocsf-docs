@@ -78,3 +78,12 @@ Where `unmapped` is best used, is for a mapper who is mapping events from multip
 
 However, using `unmapped` is not recommended for event producers.  A native event producer should extend the schema to properly capture the data that can't be mapped.  For product specific data, an extension is preferred, using either a vendor developed profile, or in some cases a new event class if the core event class doesn't adequately represent the event due to data that can't be naturally mapped.
 
+---
+
+## When should I use Authorization from Audit Activity vs. Access Activity?
+These two event classes are complementary.  Changes to a security principal's permissions, privileges, roles are Authorization activity, while the access of resources by a security principal is logged as Access Activity.  Authorization changes are independent of a particular resource access, while enforcement of authorization restrictions is made at access time and is logged as such.
+
+---
+
+## When should I use HTTP Activity vs. Access Activity?
+HTTP Activity is information focused on the network protocol, and not the gating of the resource.  While access to a resource is often requested via a web service or REST APIs, the HTTP Activity is the protocol activity for that access, not the activity of the gating service to the resource, which might be via the HTTP server nevertheless.  And of course access activity is not uniquely via HTTP: Kerberos and LDAP servers grant and deny access to resources over their respective protocols.
