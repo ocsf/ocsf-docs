@@ -87,3 +87,17 @@ These two event classes are complementary.  Changes to a security principal's pe
 
 ## When should I use HTTP Activity vs. Access Activity?
 HTTP Activity is information focused on the network protocol, and not the gating of the resource.  While access to a resource is often requested via a web service or REST APIs, the HTTP Activity is the protocol activity for that access, not the activity of the gating service to the resource, which might be via the HTTP server nevertheless.  And of course access activity is not uniquely via HTTP: Kerberos and LDAP servers grant and deny access to resources over their respective protocols.
+
+---
+
+## Can you explain Profiles to me?
+Profiles in OCSF are a way to uniformly add a set of attributes to one or more event classes or objects.  Event classes provide the basic structure and type of an event, while objects provide the structure of complex types. Their definitions can indicate that additional attributes may be included with an event instance via profiles specified with the class or object definition.  In effect, adding a profile or profiles to the definition gives you the permission to dynamically include those attributes.  When constructing an event, you would add an OCSF profile name to the `metadata.profiles` array to mix-in the additional attributes with the event.
+
+An event that has that profile applied is then a kind of that profile, as well as a kind of the event class.  For example, if the `Host` profile was applied to the `HTTP Activity` class to add the `actor.process` making a request, the event would be queriable either via the metadata.profiles[] as `Host` or via class_name as `HTTP Activity`.  If using `Host` other events from `System Activity` could also be returned with the same actor.
+
+Not all of the attributes from the profile need be added together.  For example, a profile with attributes A, B, C can be defined within the definition of class D and object E.  Class D can include A and B, while object E can include attribute C.  As with class and object extensions, the profile defined requirements, group or description can be overridden within the definition of the class or object, although this is not recommended.  Only the attribute data type and constraints cannot be overridden.
+
+---
+
+## Is there a simiilarity between OCSF and LDAP (and X.500)?
+Yes there is, although OCSF is considerably simpler.  At a fundamental level LDAP consists of attributes and object classes, while OCSF consists of attributes and event classes.  Attributes in LDAP have syntaxes and in OCSF have data types (OCSF objects are complex data types).  An event class is similar to an LDAP structural object class; it defines the basic structure of an event, as the LDAP object class defines the structure of an entry.  Like LDAP, an OCSF event class can be constructed via extending a super class to inherit attributes.  And an OCSF profile is similar to an LDAP auxiliary class which can be applied to a structural object class so that an entry can mix in additional attributes, independent of structural hierarchy of the entry.
