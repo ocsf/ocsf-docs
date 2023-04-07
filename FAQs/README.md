@@ -39,7 +39,7 @@ that critical mass as well
 as a real willingness to tackle these challenges.
 
 ## How does OCSF relate to STIX?
-OCSF and STIX are compatible.
+OCSF and STIX are compatible and complementary.  While STIX is focused on threat intelligence, campaigns and actors, OCSF is focused on events representing the activities on computer systems, networks and cloud platforms that may have security implications.  Observables represented OCSF can be matched with IOCs from STIX, for example, to determine whether a threat or malicious actor has compromised a system or enterprise environment.
 
 Structured Threat Information Expression (STIX™)
 is a open-source language and serialization format
@@ -49,7 +49,6 @@ For more info on STIX, see
 or the
 (spec itself](https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html)
 
-[Add something here on how OCSF/STIX are complimentary]
 
 ## How does OCSF relate to Kestrel?
 OCSF and Kestrel are compatible.
