@@ -2,17 +2,17 @@
 This document answers common questions about how to use the OCSF Schema
 
 ## How do I create a typical OCSF event?
-Depending on the type of event, a data producer or data mapper should first determine what event class best suits your event.  Start with the OCSF category to narrow down the choices.  For example, an endpoint security product would likely choose an event class from the System Activity category, for example, File System Activity for an AV product.
+Depending on the type of event, a data producer or data mapper should first determine what event class best suits your event.  Start with the OCSF category to narrow down the choices.  For example, an endpoint security product would likely choose an event class from the System Activity category, for example, File System Activity for an AV product.  Every event class has an `activity_id` enumeration which narrows down the intended activity of the event.  Sometimes these are simple CRUD activities, but often they are more specific to the class, such as `Logon` for the `Authentication` class in the `Identity and Access Management` category.
 
-Since endpoint security products typically send alert events when malware is detected, the producer or mapper would apply the Malware profile, which adds important attributes to the File System Activity event class, e.g. a Malware object, a MITRE ATT&CK object, etc.  These objects have their own attributes that must be populated.
+Since endpoint security products typically send alert events when malware is detected, the producer or mapper would apply the Security Control profile, which adds important attributes to the File System Activity event class, e.g. a Malware object, a MITRE ATT&CK object, the disposition etc.  These profiles have their own attributes that must be populated.
 
-If your endpoint security product also has network security capabilities, you would choose an event class from the Network Activity category, for example the general Network Activity event class.  Given that the endpoint product will have information about the host system, you would apply the Host profile, as well as the Malware profile.  The Host profile includes attributes about the device and the actor (e.g. process or user) on the host.
+If your endpoint security product also has network security capabilities, you would choose an event class from the Network Activity category, for example the general Network Activity event class.  Given that the endpoint product will have information about the host system, you would apply the Host profile, as well as the Security Control profile.  The Host profile includes attributes about the device and the actor (e.g. process or user) on the host.
 
 Every OCSF event must have all of its event class Required attributes populated, and should have its Recommended attributes populated, if possible.  This includes any of the embedded objects, such as the Malware, Process and Device objects above.
 
-All OCSF events have a set of required classification attributes from the Base Event class: the `class_uid` the `category_uid` the `activity_id` and the derived `type_uid`.  Their associates `*_name` attributes are optional.
+All OCSF events have a set of required classification attributes from the Base Event class: the `class_uid` the `category_uid` the `activity_id` and the derived `type_uid`.  Their associated `*_name` attributes are optional.
 
-In addition to the classification attributes, a number of other Base Event class attributes are required and must be populated: the `time` `metadata` and `severity` attributes.  The `metadata` attribute is an object that itself requires the `product` and associated `version` of the reporting event.
+In addition to the classification attributes, a number of other Base Event class attributes are required and must be populated: the `time` `metadata` and `severity` attributes.  The `metadata` attribute is an object that itself requires the `product` and associated `version` of the reporting event, as well as the version of the OCSF schema adhered to with the event.
 
 Note that the product should be the originating event producer (i.e. not the mapping system, nor any intermediary event processing systems) in order to best represent the origin of the event.  The `time` should be the time that the event actually occurred assuming that information is known, or the earliest possible time available to the event producer or mapper.
 
@@ -54,7 +54,7 @@ From a structural standpoint, the `actor` attribute avoids name collisions with 
 
 Currently the Actor object has a `process` and `user` attribute, where one or the other is in the role of the actor in the activity.  It also has Optional attributes for User Session, a sibling to User (not Process), `authorizations`, `idp`, and `invoked_by`.
 
-The `idp` is populated in Audit category event classes, when the actor's identity provider is known and logged with Authentication and related events.
+The `idp` is populated in IAM category event classes, when the actor's identity provider is known and logged with Authentication and related events.
 
 The `authorizations` attribute is an array of information pertaining to what permissions and privileges the actor has at the time of the event, if known.
 
@@ -80,8 +80,8 @@ However, using `unmapped` is not recommended for event producers.  A native even
 
 ---
 
-## When should I use Authorization from Audit Activity vs. Access Activity?
-These two event classes are complementary.  Changes to a security principal's permissions, privileges, roles are Authorization activity, while the access of resources by a security principal is logged as Access Activity.  Authorization changes are independent of a particular resource access, while enforcement of authorization restrictions is made at access time and is logged as such.
+## When should I use Authorize Session from Identity and Access Management vs. Web Access Activity from Application?
+These two event classes are complementary.  Changes to a security principal's permissions, privileges, roles are authorization activities, while the access of web resources by a security principal is logged as Web Access Activity.  IAM category change events are independent of a particular resource access, while enforcement of authorization restrictions is made at access time and is logged as such.
 
 ---
 
@@ -95,7 +95,7 @@ Profiles in OCSF are a way to uniformly add a set of attributes to one or more e
 
 An event that has that profile applied is then a kind of that profile, as well as a kind of the event class.  For example, if the `Host` profile was applied to the `HTTP Activity` class to add the `actor.process` making a request, the event would be queriable either via the metadata.profiles[] as `Host` or via class_name as `HTTP Activity`.  If using `Host` other events from `System Activity` could also be returned with the same actor.
 
-Not all of the attributes from the profile need be added together.  For example, a profile with attributes A, B, C can be defined within the definition of class D and object E.  Class D can include A and B, while object E can include attribute C.  As with class and object extensions, the profile defined requirements, group or description can be overridden within the definition of the class or object, although this is not recommended.  Only the attribute data type and constraints cannot be overridden.
+Not all of the attributes from the profile need be added together.  For example, a profile with attributes A, B, C can be defined within the definition of class D and object E.  Class D can include A and B, while object E can include attribute C.  You can also build in a profile, by adding the attributes of the profile directly into your class, and referencing the profile in your class definition.  In this case, as with class and object extensions, the profile defined requirements, group or description can be overridden within the definition of the class or object, although this is not recommended.  Only the attribute data type and constraints cannot be overridden.
 
 ---
 
