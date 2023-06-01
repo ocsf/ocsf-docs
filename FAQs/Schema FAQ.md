@@ -57,12 +57,14 @@ It is possible for an intermediary system to determine the grouping characcteris
 Yes, they are also events with a base class metadata object that can follow the same pattern.
 E.g. a SIEM that creates findings may have enough knowledge and state to tie multiple findings together with a metadata.correlation_uid.
 
+---
+
 ## How do I use the Actor object?
 The Actor object is intended for use in event classes when knowledge of one entity that is initiating or causing some action on another entity.  For example, if one process spawns another process, or deletes a file, the first process is the actor in the activity.
 
 From a structural standpoint, the `actor` attribute avoids name collisions with the other end of the activity in cases where a process acts on another process, as those attribute names would be in contention at the same level within the class.
 
-Currently the Actor object has a `process` and `user` attribute, where one or the other is in the role of the actor in the activity.  It also has Optional attributes for User Session, a sibling to User (not Process), `authorizations`, `idp`, and `invoked_by`.
+Currently the Actor object has a `process` and `user` attribute, where one or the other is in the role of the actor in the activity.  It also has Optional attributes for Session, `authorizations`, `idp`, and `invoked_by`.
 
 The `idp` is populated in IAM category event classes, when the actor's identity provider is known and logged with Authentication and related events.
 
@@ -75,28 +77,38 @@ The `invoked_by` attribute is populated with the name of the service or applicat
 ## When should I use the session attribute?
 The `session` attribute is usually paired with the `user` attribute.  A Session object has information pertaining to a particular user session through which the activity was initiated.  User is an entity object that isn't always associated with a session, and isn't always an actor, hence Session isn't part of the User object, but is included with the Actor object for actor semantics.
 
-Related to this, the `process` attribute of type Process has a User object which represents the user's account that the process runs under or is impersonating.  Hence, the Process object also has a `session` attribute.
+Related to this, the `process` attribute of type Process has a User object which represents the user's account that the process runs under or is impersonating.  Hence, the Process object also has a `session` attribute paired with its `user` attribute.
 
 Often, User and Session objects will be paired in many event classes.
 
 ---
 
 ## When should I use the unmapped attribute?
-The `unmapped` attribute is a catchall for event producers and mappers when there is data that doesn't populating the more specific attributes of the class.  For example, product specific data that is extracted into fields and values from a log that aren't mapped.
+The `unmapped` attribute is a catchall for event producers and mappers when there is data that doesn't populate the more specific attributes of the class.  For example, product specific data that is extracted into fields and values from a log that aren't mapped.
 
 Where `unmapped` is best used, is for a mapper who is mapping events from multiple vendors where each vendor may have unique fields not common to other vendors for the same type of data source.
 
-However, using `unmapped` is not recommended for event producers.  A native event producer should extend the schema to properly capture the data that can't be mapped.  For product specific data, an extension is preferred, using either a vendor developed profile, or in some cases a new event class if the core event class doesn't adequately represent the event due to data that can't be naturally mapped.
+However, using `unmapped` is not recommended for event producers.  A native event producer should extend the schema to properly capture the data that can't be mapped.  For product specific data, an extension is preferred, using either a vendor developed profile, or in some cases a new event class if the core event class doesn't adequately represent the event due to data that can't be naturally mapped, or activities not captured by the core class.
 
 ---
 
-## When should I use Authorize Session from Identity and Access Management vs. Web Access Activity from Application?
-These two event classes are complementary.  Changes to a security principal's permissions, privileges, roles are authorization activities, while the access of web resources by a security principal is logged as Web Access Activity.  IAM category change events are independent of a particular resource access, while enforcement of authorization restrictions is made at access time and is logged as such.
+## unmapped is of Object type.  What does that mean and is it different from JSON or a String type?
+
+Object is the empty complex data type from which all OCSF objects extend with JSON formatted attributes, requirements, and descriptions.  Think of `unmapped` as if it were an OCSF object that you created on the fly.  In the Java programming language, it would be like an inner class that doesn't need to be declared externally or globally.  That is to say, it is used within the instance of an OCSF class only, and not part of the schema.
+
+JSON is more free form data, hence the `data` attribute is of type JSON.  It can be anything encapsulated within JSON and does not need to look like an OCSF object. It should not be used for unmapped extracted fields, but rather other data that may be captured with the event.  It is used, for example, within the Enrichment object (the `enrichments` array attribute of the Base Event) to augment one or more of the mapped or unmapped attributes.
+
+A String type is reserved for unformatted text, such as the `raw_data` attribute of the Base Event class. Binary data is Base64 encoded in an attribute of `bytestring_t` type, currently not used in the core schema but may be used in extensions or within the `unmapped` object.
 
 ---
 
-## When should I use HTTP Activity vs. Access Activity?
-HTTP Activity is information focused on the network protocol, and not the gating of the resource.  While access to a resource is often requested via a web service or REST APIs, the HTTP Activity is the protocol activity for that access, not the activity of the gating service to the resource, which might be via the HTTP server nevertheless.  And of course access activity is not uniquely via HTTP: Kerberos and LDAP servers grant and deny access to resources over their respective protocols.
+## When should I use Authorize Session from Identity and Access Management vs. Web Resource Access Activity from the Application category?
+These two event classes are complementary.  Changes to a security principal's permissions, privileges, roles are authorization activities, while the access of web resources by a security principal is logged as Web Access Activity.  IAM category authorization or change events are independent of a particular resource access, while enforcement of authorization restrictions is made at access time and is logged as such. For example, when a new Logon session is created, authorization checks are made and if logged, belong in the Authorize Session class.  However, when the user or process that has those permissions accesses a web resource, and it is granted or denied, the Web Access Activity class is used.
+
+---
+
+## When should I use HTTP Activity vs. Web Resource Access Activity?
+HTTP Activity is information focused on the network protocol, and not the gating of the resource.  While access to a resource is often requested via a web service or REST APIs, the HTTP Activity is the protocol activity for that access, not the activity of the gating service to the resource, which might be via the HTTP server nevertheless.  And of course access activity in general is not uniquely via HTTP: Kerberos and LDAP servers grant and deny access to resources over their respective protocols.
 
 ---
 
