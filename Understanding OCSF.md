@@ -24,7 +24,7 @@ OCSF is agnostic to storage format, data collection and ETL processes.  The core
 
 There are four personas that are users of the framework and the schema built with the framework.  
 
-The _author_ persona is who creates or extends the schema.  The _producer _persona is who generates events natively into the schema, or via a translation from another schema.  The _mapper_ persona is who translates or creates events from another source to the schema.  The _analyst_ persona is the end user who searches the data, writes rules or analytics against the schema, or creates reports from the schema.  The analyst may also be considered the _consumer _persona.
+The _author_ persona is who creates or extends the schema.  The _producer_ persona is who generates events natively into the schema, or via a translation from another schema.  The _mapper_ persona is who translates or creates events from another source to the schema.  The _analyst_ persona is the end user who searches the data, writes rules or analytics against the schema, or creates reports from the schema.  The analyst may also be considered the _consumer_ persona.
 
 For example, a vendor may write a translation from some external source format into the schema but also extend the schema to accommodate source specific attributes or operations.  The vendor is operating as both the mapper and author personas.  A SOC analyst that collects the data in a SIEM system writes rules against the events and searches events during investigation.  The SOC analyst is operating as the analyst persona.  Finally, a vendor that emits events natively in OCSF form, even if translated, is a data producer.
 
