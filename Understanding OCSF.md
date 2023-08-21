@@ -4,11 +4,11 @@
 
 Author: Paul Agbabian
 
-Date: May 2023
+Date: August 2023
 
-Status: RFC - Corresponds to schema version 1.0.0 - RC3
+Status: RFC - Corresponds to schema version 1.0.0
 
-Version: 1.12
+Version: 1.13
 
 
 ## Introduction to the Framework and Schema
@@ -74,9 +74,9 @@ The MITRE ATT&CK Framework is widely used in the cybersecurity domain.  While th
 
 Categories are similar to Tactics, which have unique IDs.  Event Classes are similar to Techniques, which have unique IDs.  Profiles are similar to Matrices[^4], which have unique names.  Type IDs are similar to Procedures which have unique IDs.  Profiles can filter the Event Classes and Categories similar to how Matrices filter Techniques and Tactics.
 
-Differences from MITRE ATT&CK are that in OCSF, Event Classes are in only one Category, while MITRE ATT&CK Techniques can be part of multiple Tactics.  Similarly MITRE ATT&CK Procedures can be used in multiple Techniques.  MITRE ATT&CK<sup>TM</sup> has Sub-techniques while OCSF does not have Sub-Event Classes.[^5]
+Differences from MITRE ATT&CK are that in OCSF, Event Classes are in only one Category, while MITRE ATT&CK Techniques can be part of multiple Tactics.  Similarly MITRE ATT&CK Procedures can be used in multiple Techniques.  MITRE ATT&CK^TM^ has Sub-techniques while OCSF does not have Sub-Event Classes.[^5]
 
-OCSF is open and extensible by vendors, and end customers while the content within MITRE ATT&CK<sup>TM</sup> is released by MITRE.
+OCSF is open and extensible by vendors, and end customers while the content within MITRE ATT&CK^TM^ is released by MITRE.
 
 
 ## Attributes
@@ -99,7 +99,7 @@ _id, _ids, _uid, _uuid, _ip, _name, _info, _detail, _time, _dt, _process, _ver
 
 #### Arrays
 
-Attribute names used for arrays end with `s`.  For example `category_ids`.  A MITRE ATT&CK<sup>TM</sup> array is named `attacks`.
+Attribute names used for arrays end with `s`.  For example `category_ids`.  A MITRE ATT&CK^TM^ array is named `attacks`.
 
 
 #### Unique IDs
@@ -230,7 +230,7 @@ There are three important attributes in the Observable object: `name`, `value`, 
 For complex (object type) attributes, Observable.`name` is the pointer or reference to the attribute, but as an object has more than one value, Observable.`value` is not populated.
 
 
-```
+```json
 "observables": [
 { "name": "actor.process.name",
 "type": "Process Name",
@@ -261,7 +261,7 @@ Also unlike Observable, which is synchronized with the time of the event, it is 
 For example
 
 
-```
+```json
 "metadata": {
     "logged_time": 1659056959885810,
     "modified_time": 1659056959885807,
@@ -279,7 +279,13 @@ For example
 "value": "103.216.221.19"
 },
 {
-"data": {"yara_rule": wellmail_unique_strings \{ meta: description = "Rule for detection of WellMail based on unique strings contained in the binary" author = "NCSC" hash = "0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494" strings: $a = "C:\\Server\\Mail\\App_Data\\Temp\\agent.sh\\src" $b = "C:/Server/Mail/App_Data/Temp/agent.sh/src/main.go" $c = "HgQdbx4qRNv" $d = "042a51567eea19d5aca71050b4535d33d2ed43ba" $e = "main.zipit" $f = "@[^\\s]+?\\s(?P.*?)\\s" condition: uint32(0) == 0x464C457F and 3 of them \}"},
+"data": {"yara_rule": wellmail_unique_strings \{ meta: description = 
+"Rule for detection of WellMail based on unique strings contained in the binary" 
+author = "NCSC" hash = "0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494" 
+strings: $a = "C:\\Server\\Mail\\App_Data\\Temp\\agent.sh\\src" 
+$b = "C:/Server/Mail/App_Data/Temp/agent.sh/src/main.go" $c = "HgQdbx4qRNv" 
+$d = "042a51567eea19d5aca71050b4535d33d2ed43ba" $e = "main.zipit" 
+$f = "@[^\\s]+?\\s(?P.*?)\\s" condition: uint32(0) == 0x464C457F and 3 of them \}"},
 "name": "ip",
 "provider": "media.defense.gov",
 "type": "IP Address",
@@ -338,7 +344,7 @@ A snippet of a File Activity event example with random values is shown below[^9]
  
 
 
-```
+```json
 {
 "activity_id": 11,
 "activity_name": "Decrypt",
@@ -371,7 +377,7 @@ A snippet of a File Activity event example with random values is shown below[^9]
 As discussed in a previous section, an event class can have constraints that are more versatile than simple Required attribute requirements.  When at least one of a set of recommended attributes must be present, the class can assert the `at_least_one` constraint:
 
 
-```
+```json
  "constraints": {
    "at_least_one": [
      "ip",
@@ -386,7 +392,7 @@ As discussed in a previous section, an event class can have constraints that are
 Or the `just_one` constraint:
 
 
-```
+```json
 "constraints": {
    "just_one": [
      "privileges",
@@ -403,7 +409,7 @@ Or the `just_one` constraint:
 Attributes within an event class are sometimes associated with each other and in some cases only one of them is present in the event while another may be looked up at processing or storage time.  OCSF denotes this within a class definition via the association construct:
 
 
-```
+```json
 "associations": {
    "actor.user": [
      "src_endpoint"
@@ -428,153 +434,24 @@ The construct may be useful for automated processing systems where a lookup serv
 
 ## Categories
 
-**A Category organizes event classes that represent a particular domain.  **For example, a category can include event classes for different kinds of events that may be found in an access log, or audit log, or network and system events.  Each category has a unique `category_uid `attribute value which is the category identifier.  Category IDs also have `category_name `friendly name attributes, such as System Activity, Network Activity, Audit, etc.
+**A Category organizes event classes that represent a particular domain.**  For example, a category can include event classes for different kinds of events that may be found in an access log, or audit log, or network and system events.  Each category has a unique `category_uid `attribute value which is the category identifier.  Category IDs also have `category_name `friendly name attributes, such as System Activity, Network Activity, Audit, etc.
 
 An example of categories with some of their event classes is shown in the below table.
 
-
-<table>
-  <tr>
-   <td><strong>System Activity</strong>
-   </td>
-   <td><strong>Network Activity</strong>
-   </td>
-   <td><strong>Identity & Access Management</strong>
-   </td>
-   <td><strong>Findings </strong>
-   </td>
-  </tr>
-  <tr>
-   <td>File System Activity
-   </td>
-   <td>Network Activity
-   </td>
-   <td>Account Change
-   </td>
-   <td>Security Finding
-   </td>
-  </tr>
-  <tr>
-   <td>Kernel Extension Activity
-   </td>
-   <td>HTTP Activity
-   </td>
-   <td>Authentication
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>Kernel Activity
-   </td>
-   <td>DNS Activity
-   </td>
-   <td>Authorize Session
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>Memory Activity
-   </td>
-   <td>DHCP Activity
-   </td>
-   <td>Entity Management 
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>Module Activity
-   </td>
-   <td>RDP Activity
-   </td>
-   <td>User Access Management
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>Scheduled Job Activity
-   </td>
-   <td>SMB Activity
-   </td>
-   <td>Group Management
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>Process Activity
-   </td>
-   <td>SSH Activity
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-   <td>FTP Activity
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-   <td>SMTP Activity
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-   <td>Email Activity
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-   <td>Network File Activity
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-   <td>Email File Activity
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-   <td>Email URL Activity
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
+| **System Activity**       | **Network Activity**  | **Identity & Access Management** | **Findings**     | **Discovery**         | **Application Activity**     |
+| ------------------------- | --------------------- | -------------------------------- | ---------------- | --------------------- | ---------------------------- |
+| File System Activity      | Network Activity      | Account Change                   | Security Finding | Device Inventory Info | Web Resources Activity       |
+| Kernel Extension Activity | HTTP Activity         | Authentication                   |                  | Device Config State   | Application Lifecycle        |
+| Kernel Activity           | DNS Activity          | Authorize Session                |                  |                       | API Activity                 |
+| Memory Activity           | DHCP Activity         | Entity Management                |                  |                       | Web Resrouce Access Activity |
+| Module Activity           | RDP Activity          | User Access Management           |                  |                       |                              |
+| Scheduled Job Activity    | SMB Activity          | Group Management                 |                  |                       |                              |
+| Process Activity          | SSH Activity          |                                  |                  |                       |                              |
+|                           | FTP Activity          |                                  |                  |                       |                              |
+|                           | Email Activity        |                                  |                  |                       |                              |
+|                           | Network File Activity |                                  |                  |                       |                              |
+|                           | Email File Activity   |                                  |                  |                       |                              |
+|                           | Email URL Activity    |                                  |                  |                       |                              |
 
 
 Finding the right granularity of categories is an important modeling topic.  Categorization is weakly structural while event classification is strongly structural (i.e. it defines the particular attributes, their requirements, and specific Enum values for the event class).
@@ -586,54 +463,26 @@ Using profiles, some of these overlapping categorical scenarios can be handled w
 
 ## Profiles
 
-**Profiles are overlays on event classes and objects, **effectively a dynamic mix-in class of attributes with their requirements and constraints.  While event classes specialize their category domain, a profile can augment existing event classes with a set of attributes independent of category.  Attributes that must or may occur in any event class are members of the Base Event class.  Attributes that are specialized for selected classes are members of a profile.
+**Profiles are overlays on event classes and objects,** effectively a dynamic mix-in class of attributes with their requirements and constraints.  While event classes specialize their category domain, a profile can augment existing event classes with a set of attributes independent of category.  Attributes that must or may occur in any event class are members of the Base Event class.  Attributes that are specialized for selected classes are members of a profile.
 
 Multiple profiles can be added to an event class via an array of profile values in the optional `profiles` attribute of the Base Event class.  This mix-in approach allows for reuse of event classes vs. creating new classes one by one that include the same attributes.  Event classes and instances of events that support the profile can be filtered via the `profiles` attribute across all categories and event classes, forming another dimension of classification.
 
-For example, a `Security Controls `profile that adds MITRE ATT&CK<sup>TM</sup> Attack and Malware objects to System Activity classes avoids having to recreate a new event class, or many classes, with all of the same attributes as the System Activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the `Malware `profile.  A `Host` profile can add `Device`, and `Actor `objects to Network Activity event classes when the network activity log source is a user’s computer.  Note that the `Actor `object includes `Process `and `User `objects, so a Host profile can include all of these when applied.  A Cloud profile could mix-in cloud platform specific information onto Network Activity events.
+For example, a `Security Controls` profile that adds MITRE ATT&CK^TM^ Attack and Malware objects to System Activity classes avoids having to recreate a new event class, or many classes, with all of the same attributes as the System Activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the `Malware `profile.  A `Host` profile can add `Device`, and `Actor` objects to Network Activity event classes when the network activity log source is a user’s computer.  Note that the `Actor `object includes `Process `and `User `objects, so a Host profile can include all of these when applied.  A Cloud profile could mix-in cloud platform specific information onto Network Activity events.
 
-The `profiles `attribute is an optional array attribute of the Base Event class.  The absence of the `profiles `attribute means no profile attributes are added as would be expected.  Attributes defined with a profile have requirements that cannot be overridden, since profiles are themselves optional; it is assumed that the application of a profile is because those attributes are desired and can be populated.
+The `profiles` attribute is an optional array attribute of the Base Event class.  The absence of the `profiles` attribute means no profile attributes are added as would be expected.  Attributes defined with a profile have requirements that cannot be overridden, since profiles are themselves optional; it is assumed that the application of a profile is because those attributes are desired and can be populated.
 
-However some classes, such as System Activity classes, build-in the attributes of a profile, for example the `Host` profile attributes `device `and `actor` are defined in the class.  When a class definition includes the profile attributes, it still registers for that profile in the class definition so as to match any searches across events for that profile. In this case the class defined attribute requirement definitions take precedence.
+However some classes, such as System Activity classes, build-in the attributes of a profile, for example the `Host` profile attributes `device` and `actor` are defined in the class.  When a class definition includes the profile attributes, it still registers for that profile in the class definition so as to match any searches across events for that profile. In this case the class defined attribute requirement definitions take precedence.
 
-Three core schema profiles for `Security Control`, `Host` and `Cloud` are shown in the below table with their attributes.
+Core schema profiles for `Security Control`, `Host`, `Cloud`, `Container` and `Linux` (for the Linux extension described later) are shown in the below table with their attributes.
 
+| **Security Control**         | **Host** | **Cloud** | **Container** | **Linux** |
+| :--------------------------- | -------- | --------- | ------------- | --------- |
+| attacks                      | actor    | api       | container     | group     |
+| disposition_id / disposition | device   | cloud     | namespace_pid | euid      |
+| malware                      |          |           |               | egid      |
+|                              |          |           |               | auid      |
 
-<table>
-  <tr>
-   <td><strong>Security Control Profile</strong>
-   </td>
-   <td><strong>Host Profile</strong>
-   </td>
-   <td><strong>Cloud Profile</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><code>disposition_id / disposition</code>
-   </td>
-   <td><code>device</code>
-   </td>
-   <td><code>cloud</code>
-   </td>
-  </tr>
-  <tr>
-   <td><code>attacks</code>
-   </td>
-   <td><code>actor</code>
-   </td>
-   <td><code>api</code>
-   </td>
-  </tr>
-  <tr>
-   <td><code>malware</code>
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+A special `Date/Time` profile adds `Datetime` typed time attributes in every class where there is a `Timestamp` time attribute.  This allows for human readable RFC-3339 strings paired with epoch UTC integer values.
 
 Other profiles could be product oriented, such as Firewall, IDS, VA, DLP etc. if they need to add attributes to existing classes.  They can also be more general, platform oriented, such as for Mac, Linux or Windows environments.
 
@@ -694,69 +543,13 @@ Another use of extensions to the core schema is the development of new schema ar
 
 Examples of new experimental categories, new event classes that contain some new attributes and objects are shown in the table below with a `Dev` extension superscript convention.  In the example, extension classes were added to the core Findings category, and three extension categories were added, Policy, Remediation and Diagnostic, with extension classes.
 
-
-<table>
-  <tr>
-   <td><strong>Findings</strong>
-   </td>
-   <td><strong>Policy<sup>Dev</sup></strong>
-   </td>
-   <td><strong>Remediation<sup>Dev</sup></strong>
-   </td>
-   <td><strong>Diagnostic<sup>Dev</sup></strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Incident Creation<sup>Dev</sup>
-   </td>
-   <td>Clipboard Content Protection<sup>Dev</sup>
-   </td>
-   <td>File Remediation<sup>Dev</sup>
-   </td>
-   <td>CPU Usage<sup>Dev</sup>
-   </td>
-  </tr>
-  <tr>
-   <td>Incident Associate<sup>Dev</sup>
-   </td>
-   <td>Compliance<sup>Dev</sup>
-   </td>
-   <td>Folder Remediation<sup>Dev</sup>
-   </td>
-   <td>Memory Usage<sup>Dev</sup>
-   </td>
-  </tr>
-  <tr>
-   <td>Incident Closure<sup>Dev</sup>
-   </td>
-   <td>Compliance Scan<sup>Dev</sup>
-   </td>
-   <td>Unsuccessful Remediation<sup>Dev</sup>
-   </td>
-   <td>Status<sup>Dev</sup>
-   </td>
-  </tr>
-  <tr>
-   <td>Incident Update<sup>Dev</sup>
-   </td>
-   <td>Content Protection<sup>Dev</sup>
-   </td>
-   <td>Startup Application Remediation<sup>Dev</sup>
-   </td>
-   <td>Throughput<sup>Dev</sup>
-   </td>
-  </tr>
-  <tr>
-   <td>Email Delivery Finding<sup>Dev</sup>
-   </td>
-   <td>Information Protection<sup>Dev</sup>
-   </td>
-   <td>User Session Remediation<sup>Dev</sup>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
+| **Findings**                | **Policy^Dev^**                   | **Remediation^Dev^**                 | **Diagnostic^Dev^** |
+| --------------------------- | --------------------------------- | ------------------------------------ | ------------------- |
+| Incident Creation^Dev^      | Clipbaord Content Protection^Dev^ | File Remediation^Dev^                | CPU Usage^Dev^      |
+| Incident Associate^Dev^     | Compliance^Dev^                   | Folder Remediation^Dev^              | Memory Usage^Dev^   |
+| Incident Closure^Dev^       | Compliance Scan^Dev^              | Startup Application Remediation^Dev^ | Throughput^Dev^     |
+| Incident Update^Dev^        | Content Protection^Dev^           | User Session Remediation^Dev^        |                     |
+| Email Delivery Finding^Dev^ | Information Protection^Dev^       |                                      |                     |
 
 
 A brief discussion of how to extend the schema is found in Appendix C.
@@ -798,23 +591,18 @@ The OCSF schema repository can be found at [https://github.com/ocsf/ocsf-schema]
 
 The repository is structured as follows:
 
-categories.json 	– the schema categories
+| **File or Folder** | **Purpose**                                                                           |
+| ------------------ | :------------------------------------------------------------------------------------ |
+| categories.json    | the schema categories are defined and must be present for classes to be in a category |
+| dictionary.json    | the schema dictionary is where all attributes must be defined                         |
+| version.json       | the schema semver version, every change to the schema requires this file be updated   |
+| enums/             | the schema enum definitions, optional if enums are shared                             |
+| events/            | the schema event classes                                                              |
+| extensions/        | the schema extensions, a similar structure is set per extension                       |
+| includes/          | the schema shared files                                                               |
+| objects/           | the schema object definitions                                                         |
+| profiles/          | the schema profiles                                                                   |
 
-dictionary.json 	– the schema dictionary
-
-version.json 		– the schema version
-
-enums 			– the schema enum definitions
-
-events 			– the schema event classes
-
-extensions 		– the schema extensions (future additions)
-
-includes 		– the schema shared files
-
-objects 		– the schema object definitions
-
-profiles 		– the schema profiles
 
 For information and examples about how to add to the schema, see [CONTRIBUTING.md](https://github.com/ocsf/ocsf-schema/blob/a46b6df1d60ad052739caa96c29109e9b233ef82/CONTRIBUTING.md) in the OCSF GitHub.
 
@@ -823,62 +611,20 @@ For information and examples about how to add to the schema, see [CONTRIBUTING.m
 
 To extend the schema create a new directory using a unique extension name (e.g. dev)  in the extensions directory. The directory structure is the same as the top level repository structure above, and it may contain the following files and subdirectories, depending on what type of extension is desired:
 
-
-<table>
-  <tr>
-   <td>categories.json
-   </td>
-   <td>– Create it to define a new event category to reserve a range of class IDs
-   </td>
-  </tr>
-  <tr>
-   <td>dictionary.json
-   </td>
-   <td>– Create it to define new attributes
-   </td>
-  </tr>
-  <tr>
-   <td>
-events/
-   </td>
-   <td>– Create it to define new event classes 
-   </td>
-  </tr>
-  <tr>
-   <td>
-objects/
-   </td>
-   <td>– Create it to define new objects
-   </td>
-  </tr>
-</table>
+| **File or Folder** | **Purpose**                                                           |
+| ------------------ | --------------------------------------------------------------------- |
+| categories.json    | Create to define a new event category to reserve a range of class IDs |
+| dictionary.json    | Create to define new attributes                                       |
+| events/            | Create to define new event classes                                    |
+| objects/           | Create to define new objects                                          |
+| profiles/          | Create to define new profiles                                         |
 
 
 In order to reserve an ID space, and make your extension public, add a UID to your extension name in the OCSF Extensions Registry [here](https://github.com/ocsf/ocsf-schema/blob/main/extensions.md) to avoid collisions with core or other extension schemas.  For example, the dev extension would have a row in the table as follows:
 
-
-<table>
-  <tr>
-   <td><strong>Extension Name</strong>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>UID</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Development
-   </td>
-   <td>dev
-   </td>
-   <td>999
-   </td>
-   <td>The development (TODO) schema extensions
-   </td>
-  </tr>
-</table>
+| **Extension Name** | **Type** | **UID** | **Notes**                         |
+| ------------------ | -------- | ------- | --------------------------------- |
+| Development        | dev      | 999     | The development schema extensions |
 
 
 New categories and event classes will have their unique IDs offset by the UID.
@@ -896,10 +642,10 @@ More information about extending existing schema artifacts can be found at [exte
      For the most up-to-date guidelines and data types, refer to the schema browser at [https://schema.ocsf.io](https://schema.ocsf.io).
 
 [^3]:
-     MITRE ATT&CK<sup>TM</sup>: https://attack.mitre.org/
+     MITRE ATT&CK^TM^: https://attack.mitre.org/
 
 [^4]:
-     MITRE ATT&CK<sup>TM</sup> Matrix: https://attack.mitre.org/matrices/enterprise/
+     MITRE ATT&CK^TM^ Matrix: https://attack.mitre.org/matrices/enterprise/
 
 [^5]:
      The internal source definition of an OCSF schema can be hierarchical but the resulting compiled schema does not expose sub classes.
