@@ -74,9 +74,9 @@ The MITRE ATT&CK Framework is widely used in the cybersecurity domain.  While th
 
 Categories are similar to Tactics, which have unique IDs.  Event Classes are similar to Techniques, which have unique IDs.  Profiles are similar to Matrices[^4], which have unique names.  Type IDs are similar to Procedures which have unique IDs.  Profiles can filter the Event Classes and Categories similar to how Matrices filter Techniques and Tactics.
 
-Differences from MITRE ATT&CK are that in OCSF, Event Classes are in only one Category, while MITRE ATT&CK Techniques can be part of multiple Tactics.  Similarly MITRE ATT&CK Procedures can be used in multiple Techniques.  MITRE ATT&CK^TM^ has Sub-techniques while OCSF does not have Sub-Event Classes.[^5]
+Differences from MITRE ATT&CK are that in OCSF, Event Classes are in only one Category, while MITRE ATT&CK Techniques can be part of multiple Tactics.  Similarly MITRE ATT&CK Procedures can be used in multiple Techniques.  MITRE ATT&CK<sup>TM</sup> has Sub-techniques while OCSF does not have Sub-Event Classes.[^5]
 
-OCSF is open and extensible by vendors, and end customers while the content within MITRE ATT&CK^TM^ is released by MITRE.
+OCSF is open and extensible by vendors, and end customers while the content within MITRE ATT&CK<sup>TM</sup> is released by MITRE.
 
 
 ## Attributes
@@ -99,7 +99,7 @@ _id, _ids, _uid, _uuid, _ip, _name, _info, _detail, _time, _dt, _process, _ver
 
 #### Arrays
 
-Attribute names used for arrays end with `s`.  For example `category_ids`.  A MITRE ATT&CK^TM^ array is named `attacks`.
+Attribute names used for arrays end with `s`.  For example `category_ids`.  A MITRE ATT&CK<sup>TM</sup> array is named `attacks`.
 
 
 #### Unique IDs
@@ -467,7 +467,7 @@ Using profiles, some of these overlapping categorical scenarios can be handled w
 
 Multiple profiles can be added to an event class via an array of profile values in the optional `profiles` attribute of the Base Event class.  This mix-in approach allows for reuse of event classes vs. creating new classes one by one that include the same attributes.  Event classes and instances of events that support the profile can be filtered via the `profiles` attribute across all categories and event classes, forming another dimension of classification.
 
-For example, a `Security Controls` profile that adds MITRE ATT&CK^TM^ Attack and Malware objects to System Activity classes avoids having to recreate a new event class, or many classes, with all of the same attributes as the System Activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the `Malware `profile.  A `Host` profile can add `Device`, and `Actor` objects to Network Activity event classes when the network activity log source is a user’s computer.  Note that the `Actor `object includes `Process `and `User `objects, so a Host profile can include all of these when applied.  A Cloud profile could mix-in cloud platform specific information onto Network Activity events.
+For example, a `Security Controls` profile that adds MITRE ATT&CK<sup>TM</sup> Attack and Malware objects to System Activity classes avoids having to recreate a new event class, or many classes, with all of the same attributes as the System Activity classes.  A query for events of the class will return all the events, with or without the security information, while a query for just the profile will return events across all event classes that support the `Malware `profile.  A `Host` profile can add `Device`, and `Actor` objects to Network Activity event classes when the network activity log source is a user’s computer.  Note that the `Actor `object includes `Process `and `User `objects, so a Host profile can include all of these when applied.  A Cloud profile could mix-in cloud platform specific information onto Network Activity events.
 
 The `profiles` attribute is an optional array attribute of the Base Event class.  The absence of the `profiles` attribute means no profile attributes are added as would be expected.  Attributes defined with a profile have requirements that cannot be overridden, since profiles are themselves optional; it is assumed that the application of a profile is because those attributes are desired and can be populated.
 
@@ -543,13 +543,13 @@ Another use of extensions to the core schema is the development of new schema ar
 
 Examples of new experimental categories, new event classes that contain some new attributes and objects are shown in the table below with a `Dev` extension superscript convention.  In the example, extension classes were added to the core Findings category, and three extension categories were added, Policy, Remediation and Diagnostic, with extension classes.
 
-| **Findings**                | **Policy^Dev^**                   | **Remediation^Dev^**                 | **Diagnostic^Dev^** |
-| --------------------------- | --------------------------------- | ------------------------------------ | ------------------- |
-| Incident Creation^Dev^      | Clipbaord Content Protection^Dev^ | File Remediation^Dev^                | CPU Usage^Dev^      |
-| Incident Associate^Dev^     | Compliance^Dev^                   | Folder Remediation^Dev^              | Memory Usage^Dev^   |
-| Incident Closure^Dev^       | Compliance Scan^Dev^              | Startup Application Remediation^Dev^ | Throughput^Dev^     |
-| Incident Update^Dev^        | Content Protection^Dev^           | User Session Remediation^Dev^        |                     |
-| Email Delivery Finding^Dev^ | Information Protection^Dev^       |                                      |                     |
+| **Findings**                         | **Policy<sup>Dev</sup>**                   | **Remediation<sup>Dev</sup>**                 | **Diagnostic<sup>Dev</sup>** |
+| ------------------------------------ | ------------------------------------------ | --------------------------------------------- | ---------------------------- |
+| Incident Creation<sup>Dev</sup>      | Clipbaord Content Protection<sup>Dev</sup> | File Remediation<sup>Dev</sup>                | CPU Usage<sup>Dev</sup>      |
+| Incident Associate<sup>Dev</sup>     | Compliance<sup>Dev</sup>                   | Folder Remediation<sup>Dev</sup>              | Memory Usage<sup>Dev</sup>   |
+| Incident Closure<sup>Dev</sup>       | Compliance Scan<sup>Dev</sup>              | Startup Application Remediation<sup>Dev</sup> | Throughput<sup>Dev</sup>     |
+| Incident Update<sup>Dev</sup>        | Content Protection<sup>Dev</sup>           | User Session Remediation<sup>Dev</sup>        |                              |
+| Email Delivery Finding<sup>Dev</sup> | Information Protection<sup>Dev</sup>       |                                               |                              |
 
 
 A brief discussion of how to extend the schema is found in Appendix C.
@@ -642,10 +642,10 @@ More information about extending existing schema artifacts can be found at [exte
      For the most up-to-date guidelines and data types, refer to the schema browser at [https://schema.ocsf.io](https://schema.ocsf.io).
 
 [^3]:
-     MITRE ATT&CK^TM^: https://attack.mitre.org/
+     MITRE ATT&CK<sup>TM</sup>: https://attack.mitre.org/
 
 [^4]:
-     MITRE ATT&CK^TM^ Matrix: https://attack.mitre.org/matrices/enterprise/
+     MITRE ATT&CK<sup>TM</sup> Matrix: https://attack.mitre.org/matrices/enterprise/
 
 [^5]:
      The internal source definition of an OCSF schema can be hierarchical but the resulting compiled schema does not expose sub classes.
