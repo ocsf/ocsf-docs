@@ -144,7 +144,9 @@ The requirement flags are:
 
 Event classes are designed so that the most essential attributes are required, to give enough meaning and context to the information reported by the data source.  If an attribute is required, then a consumer of the event can count on the attribute being present, and its value populated.  If a required attribute cannot be populated for a particular event class, a default value is defined by the event class, usually `Unknown`.[^7]  
 
-Recommended attributes should be populated but cannot be in all cases and unlike required attributes are not subject to validation.  They do not have default values.  Optional attributes may be populated to add context and when data sources emit richer information.
+Recommended attributes should be populated but cannot be in all cases and unlike required attributes are not subject to validation.  They do not have default values. 
+Optional attributes may be populated to add context and when data sources emit richer information.
+Data onboarders should place more weight on recommended attributes versus optional attributes. The intent is to empower security organizations to make risk-based decisions surrounding data ingest. For instance, "Our storage team does not have the budget to log this info" versus "We have the budget, and logging this recommended field will save us headaches".
 
 Some event classes may specify constraints on recommended attributes.
 
