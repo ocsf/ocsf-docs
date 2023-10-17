@@ -146,7 +146,7 @@ Event classes are designed so that the most essential attributes are required, t
 
 Recommended attributes should be populated but cannot be in all cases and unlike required attributes are not subject to validation.  They do not have default values. 
 Optional attributes may be populated to add context and when data sources emit richer information.
-Data onboarders should place more weight on recommended attributes versus optional attributes. The intent is to empower security organizations to make risk-based decisions surrounding data ingest. For instance, "Our storage team does not have the budget to log this info" versus "We have the budget, and logging this recommended field will save us headaches".
+Data onboarders should place more weight on recommended attributes versus optional attributes.
 
 Some event classes may specify constraints on recommended attributes.
 
