@@ -133,4 +133,38 @@ These are naming conventions rather than metaschema or data type validation fact
 
 Note that sibling string attributes can be used standalone, i.e. without an associated enum or unique identifier.
 
+---
+
+## How is backwards compatibility managed?
+OCSF follows the [semver](https://semver.org/) versioning scheme.
+
+From the semver documentation:
+
+> Given a version number MAJOR.MINOR.PATCH, increment the:
+> 
+> MAJOR version when you make incompatible API changes
+> MINOR version when you add functionality in a backward compatible manner
+> PATCH version when you make backward compatible bug fixes
+
+In terms practical to OCSF users, this means:
+ - PATCH version increments may change documentation values like `description`.
+ - MINOR version increments may add new schemata like attributes or events.
+ - MAJOR version increments may add and remove anything.
+
+So any version in the 1.x line should be backwards-compatible with previous 1.x versions.
+
+---
+
+## What changes are not backwards compatible?
+
+1. The removal of an event, object, attribute, data type, or enum member.
+  1. The `name` of an event or object is missing in the NEW schema.
+  2. The dictionary key of an attribute or data type (its implied `name`) is missing in the NEW schema.
+  3. The dictionary key of an enum member (its value) is missing in the NEW schema.
+  4. The `uid` or `class_uid` of an event is missing in the NEW schema.
+2. Renaming an event, object, attribute, or enum member.
+  1. A special case of removal in which the same `caption` belongs to an element with a different `name`, key, or `class_uid`; or the same `class_uid` belongs to an event with a different name.
+3. Changing the data type of an attribute.
+4. Changing the `requirement` value of an attribute to be more restrictive (e.g. from `optional` to `required`).
+5. Making the `constraints` of a data type more restrictive.
 
