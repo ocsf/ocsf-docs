@@ -165,6 +165,6 @@ So any version in the 1.x line should be backwards-compatible with previous 1.x 
 2. Renaming an event, object, attribute, or enum member.
   1. A special case of removal in which the same `caption` belongs to an element with a different `name`, key, or `class_uid`; or the same `class_uid` belongs to an event with a different name.
 3. Changing the data type of an attribute.
-4. Changing the `requirement` value of an attribute to be more restrictive (e.g. from `optional` to `required`).
+4. Changing the `requirement` value of an attribute from `optional` or `recommended` to `required`.
 5. Making the `constraints` of a data type more restrictive.
 
