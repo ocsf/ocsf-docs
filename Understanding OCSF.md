@@ -4,11 +4,11 @@
 
 Author: Paul Agbabian
 
-Date: August 2023
+Date: August 2023 (with minor formatting edits August 2024)
 
 Status: RFC - Corresponds to schema version 1.0.0
 
-Version: 1.13
+Version: 1.13.1
 
 
 ## Introduction to the Framework and Schema
@@ -32,8 +32,6 @@ For example, a vendor may write a translation from some external source format i
 ### Taxonomy Constructs
 
 There are 5 fundamental constructs of the OCSF taxonomy: 
-
-
 
 1. Data Types, Attributes and Arrays
 2. Event Class
@@ -96,7 +94,6 @@ _id, _ids, _uid, _uuid, _ip, _name, _info, _detail, _time, _dt, _process, _ver
 ```
 
 
-
 #### Arrays
 
 Attribute names used for arrays end with `s`.  For example `category_ids`.  A MITRE ATT&CK<sup>TM</sup> array is named `attacks`.
@@ -135,8 +132,6 @@ For all defined enumeration integer values, including `Unknown`, the enum label 
 Attributes in the context of an event class have a requirement flag, that depends on the semantics of the event class.  Attributes themselves do not have a requirement flag, only within the context of event classes.[^6]
 
 The requirement flags are:
-
-
 
 * Required
 * Recommended
@@ -185,8 +180,6 @@ Event Processor -- a system that processes and logs, including an ETL chain, the
 
 The core time attributes may be present in all events as they are from the Base Event class.  They are:
 
-
-
 * `original_time: string` \
 The original event time, as created by the event producer as part of the Metadata object of the Base Event class. The time format is not specified by OCSF and as such is a non-validated string. The time could be UTC time in milliseconds (1659378222123), ISO 8601 (2019-09-07T15:50-04:00), or any other value (12/13/2021 10:12:55 PM).
 * `time`:` timestamp_t` \
@@ -229,25 +222,33 @@ There are three important attributes in the Observable object: `name`, `value`, 
 
 For complex (object type) attributes, Observable.`name` is the pointer or reference to the attribute, but as an object has more than one value, Observable.`value` is not populated.
 
-
-```json
-"observables": [
-{ "name": "actor.process.name",
-"type": "Process Name",
-"type_id": 9,
-"value": "Notepad.exe"
-},
-{ "Name": "tls.ja3_hash",
-"Type": "Fingerprint",
-"Type_id": "30"
-},
-{ "name": "file.name",
-"type": "File Name",
-"type_id": 7,
-"value": "Notepad.exe"
-}]
+```jsonc
+{
+  // ... (OCSF event fields)
+  "metadata": {
+    // ... (other metadata fields)
+    "observables": [
+      {
+        "name": "actor.process.name",
+        "type": "Process Name",
+        "type_id": 9,
+        "value": "Notepad.exe"
+      },
+      {
+        "name": "tls.ja3_hash",
+        "type": "Fingerprint",
+        "type_id": 30
+      },
+      {
+        "name": "file.name",
+        "type": "File Name",
+        "type_id": 7,
+        "value": "Notepad.exe"
+      }
+    ]
+  }
+}
 ```
-
 
 
 ### Enrichments
@@ -260,39 +261,40 @@ Also unlike Observable, which is synchronized with the time of the event, it is 
 
 For example
 
-
-```json
-"metadata": {
+```jsonc
+{
+  // ... (OCSF event fields)
+  "metadata": {
+    // ... (other metadata fields)
     "logged_time": 1659056959885810,
     "modified_time": 1659056959885807,
     "processed_time": 1659056959885796,
     "sequence": 69,
     "uid": "1310fc5c-0edb-11ed-88fc-0242ac110002",
-    "version": "1.0.0-RC3"
-},
-"enrichments": [
-{
-"data": {"hash": 0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494},
-"name": "ip",
-"provider": "media.defense.gov",
-"type": "IP Address",
-"value": "103.216.221.19"
-},
-{
-"data": {"yara_rule": wellmail_unique_strings \{ meta: description = 
-"Rule for detection of WellMail based on unique strings contained in the binary" 
-author = "NCSC" hash = "0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494" 
-strings: $a = "C:\\Server\\Mail\\App_Data\\Temp\\agent.sh\\src" 
-$b = "C:/Server/Mail/App_Data/Temp/agent.sh/src/main.go" $c = "HgQdbx4qRNv" 
-$d = "042a51567eea19d5aca71050b4535d33d2ed43ba" $e = "main.zipit" 
-$f = "@[^\\s]+?\\s(?P.*?)\\s" condition: uint32(0) == 0x464C457F and 3 of them \}"},
-"name": "ip",
-"provider": "media.defense.gov",
-"type": "IP Address",
-"value": "103.216.221.19"
-}]
+    "version": "1.0.0"
+  },
+  "enrichments": [
+    {
+      "data": {
+        "hash": "0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494"
+      },
+      "name": "ip",
+      "provider": "media.defense.gov",
+      "type": "IP Address",
+      "value": "103.216.221.19"
+    },
+    {
+      "data": {
+        "yara_rule": "rule wellmail_unique_strings \n{\n  meta: \n    description = \"Rule for detection of WellMail based on unique strings contained in the binary\" \n    author = \"NCSC\"\n    hash = \"0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494\"\n  strings:\n    $a = \"C:\\\\Server\\\\Mail\\\\App_Data\\\\Temp\\\\agent.sh\\\\src\"\n    $b = \"C:/Server/Mail/App_Data/Temp/agent.sh/src/main.go\"\n    $c = \"HgQdbx4qRNv\"\n    $d = \"042a51567eea19d5aca71050b4535d33d2ed43ba\"\n    $e = \"main.zipit\"\n    $f = \"@[^\\\\s]+?\\\\s(?P.*?)\\\\s\"\n  condition: \n    uint32(0) == 0x464C457F and 3 of them\n}\n"
+      },
+      "name": "ip",
+      "provider": "media.defense.gov",
+      "type": "IP Address",
+      "value": "103.216.221.19"
+    }
+  ]
+}
 ```
-
 
 
 ## Event Classes
@@ -342,88 +344,88 @@ The value is calculated as: `class_uid` `* 100 + activity_id`.  For example:
 A snippet of a File Activity event example with random values is shown below[^9]:
 
  
-
-
 ```json
 {
-"activity_id": 11,
-"activity_name": "Decrypt",
-"actor": {},
-"category_name": "System Activity",
-"category_uid": 1,
-"class_name": "File System Activity",
-"class_uid": 1001,
-"device": {},
-"end_time": 1685403212867803,
-"file": {},
-"message": "entry queue amateur",
-"metadata": {},
-"observables": [],
-"severity": "Low",
-"severity_id": 2,
-"start_time": 1685403212792508,
-"status": "img logs grove",
-"status_detail": "barrier filled clothes",
-"time": 1685403212834047,
-"type_name": "File System Activity: Decrypt",
-"type_uid": 100111
+  "activity_id": 11,
+  "activity_name": "Decrypt",
+  "actor": {},
+  "category_name": "System Activity",
+  "category_uid": 1,
+  "class_name": "File System Activity",
+  "class_uid": 1001,
+  "device": {},
+  "end_time": 1685403212867803,
+  "file": {},
+  "message": "entry queue amateur",
+  "metadata": {},
+  "observables": [],
+  "severity": "Low",
+  "severity_id": 2,
+  "start_time": 1685403212792508,
+  "status": "img logs grove",
+  "status_detail": "barrier filled clothes",
+  "time": 1685403212834047,
+  "type_name": "File System Activity: Decrypt",
+  "type_uid": 100111
 }
 ```
-
 
 
 ### Constraints
 
 As discussed in a previous section, an event class can have constraints that are more versatile than simple Required attribute requirements.  When at least one of a set of recommended attributes must be present, the class can assert the `at_least_one` constraint:
 
-
 ```json
- "constraints": {
-   "at_least_one": [
-     "ip",
-     "mac",
-     "name",
-     "hostname"
-   ]
- }
-```
-
-
-Or the `just_one` constraint:
-
-
-```json
-"constraints": {
-   "just_one": [
-     "privileges",
-     "group"
-   ]
- }
+ {
+  // ... (event class or object definition)
+  "constraints": {
+    "at_least_one": [
+      "ip",
+      "mac",
+      "name",
+      "hostname"
+    ]
+  }
 }
 ```
 
+Or the `just_one` constraint:
+
+```json
+{
+  // ... (event class or object definition)
+  "constraints": {
+    "just_one": [
+      "privileges",
+      "group"
+    ]
+  }
+}
+```
 
 
 ### Associations
 
 Attributes within an event class are sometimes associated with each other and in some cases only one of them is present in the event while another may be looked up at processing or storage time.  OCSF denotes this within a class definition via the association construct:
 
-
 ```json
-"associations": {
-   "actor.user": [
-     "src_endpoint"
-   ],
-   "dst_endpoint": [
-     "user"
-   ],
-   "src_endpoint": [
-     "actor.user"
-   ],
-   "user": [
-     "dst_endpoint"
-   ]
- }
+{
+  // ... (event class definition)
+  "associations": {
+    "actor.user": [
+      "src_endpoint"
+    ],
+    "dst_endpoint": [
+      "user"
+    ],
+    "src_endpoint": [
+      "actor.user"
+    ],
+    "user": [
+      "dst_endpoint"
+    ]
+  }
+}
 ```
 
 
@@ -559,8 +561,6 @@ A brief discussion of how to extend the schema is found in Appendix C.
 
 
 ### Guidelines for attribute names
-
-
 
 * Attribute names must be a valid UTF-8 sequence. 
 * Attribute names must be all lower case. 
