@@ -180,7 +180,7 @@ Defining observables in definitions of hidden event classes or object is not sup
 #### Definition Nuance: Profiles
 Profile definitions can override attribute observables (as with any other attribute field), though cannot modify object or class-specific attribute path observables (the top-level `observable` definitions). In other words, with regard to observables profiles can only affect observables by attributes.
 
-> |!NOTE|
+> [!NOTE]
 > Implementation-wise, this restriction may not be difficult to overcome, however it does become difficult to conceptualize and visualize the effect of a profile if it can affect an a top level property of event class or object this way. Constraints, another top-level event class / object concept, are similarly not controllable by profiles.
 
 #### Definition Nuance: New Object Observables Discouraged
@@ -341,6 +341,6 @@ Let's say we have a hidden object definition with `name` `_foo`, as well as `bar
 }
 ```
 
-After compilation, `_foo` disappears, and both `bar` and `baz` are defined as observables by object with the `type_id` value 42. This is a collision and if done manually would be flagged an an error between `bar` and `baz`.
+After compilation, `_foo` disappears, and both `bar` and `baz` are defined as observables by object with the `type_id` value `42`. This is a collision and if done manually would be flagged an an error between `bar` and `baz`.
 
 What actually happens in this case is that when the hidden type definition like `_foo` is encountered, the OCSF Server and OCSF Validator ensure that it does not attempt to define observables of any kind.
