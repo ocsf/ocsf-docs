@@ -124,7 +124,7 @@ Example in object definition file `objects/cve.json`:
 
 Event classes work identically: attribute observable definitions occur in attribute detail objects inside the `attributes` object.
 
-### Definition Example: Observable by Class-specific Attribute Path
+### Definition Example: Observable by Class-Specific Attribute Path
 This last observable definition type allows defining an observable for an attribute inside a nested structure for an event class, though it can be used for attributes directly defined in the class (in this case being a alternative to defining event class attribute observables). This type of definition is done by adding an `observables` object to the event class definition that maps from attribute paths to observable `type_id` values.
 
 Class-specific attribute path definitions also work for event class `extends` definitions both for the normal case (subclass / subtype) as well as the "patch extends" case. In the extends cases, the class-specific observable definitions replace a prior definition or add a new definition. 
@@ -167,12 +167,12 @@ When defining a new observable, be mindful of collisions. One can use the OCSF S
 Developers of private extensions should be extra wary to avoid collisions. Unlike most other unique identifier integer values in extensions, observable values are _not_ modified with tricky multiplication. Consider using using high integer numbers related to the extension's `uid`. For example for extension `uid` `999`, the observable numbers could start from `999000` (extension `uid` times `1000` plus observable number). This sort of precaution could become important as OCSF gains acceptance across the industry, and publishing and accepting OCSF events generated with private extensions begins to occur.
 
 #### Definition Nuance: Precedence and the "Use the Most General" Rule
-The definition types establish a precedence with 1 being the most general to 6 being the most specific. 
+The definition types, as listed in the [Defining Observables](#defining-observables) section, establish a precedence with 1 being the most general to 6 being the most specific.
 
 In cases where an OCSF event has an attribute is affected by more than one observable definition, _the most general_ should be used.
 
 #### Definition Nuance: Extends
-Observable definitions can be overriden in extensions (via `extends`) in event class and object definitions, including the special "patch" type of extends. This is also mentioned above, though repeated here to emphasize that this is a general rule for all types of observable definitions.
+Observable definitions can be overridden in extensions (via `extends`) in event class and object definitions, including the special "patch" type of extends. This is also mentioned above, though repeated here to emphasize that this is a general rule for all types of observable definitions.
 
 #### Definition Nuance: Hidden Types Are Not Supported
 Defining observables in definitions of hidden event classes or object is not supported as this would lead to colliding observables `type_id` values. See [Appendix 2: Hidden Types](#appendix-2-hidden-types) for more information. This is also mentioned above, though repeated here to emphasize that this is a general rule for all types of observable definitions.
@@ -206,12 +206,12 @@ Whether creating observables manually -- a part of mapping process -- or automat
 ### Populating Observable Path References
 The `observable` object's `name` attribute is an attribute path reference. See [Appendix 1: Attribute Paths](#appendix-1-attribute-paths) for details.
 
-### Populating The Value Field
+### Populating the Value Field
 The `observable` object's `value` field should be populated for all primitive types (strings, numbers, booleans), _and_ for arrays of primitive types (see next paragraph). The `value` field is specifically not meant to be used for observable objects, nor for for arrays of objects.
 
 For arrays of primitive types, one `observable` object should be created for each element of the array with the `value` field being set to the array element's value.
 
-#### All Observable Values are Strings
+#### All Observable Values Are Strings
 The `observable` object's `value` is defined as a type `string_t`. (Specifically notice that the type of `value` is not the problematic `json_t` type, which means any type.) 
 
 A primitive value that is not a string (either `string_t` or a subtype of `string_t`) must be converted to string.
