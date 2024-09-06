@@ -48,13 +48,9 @@ See [OCSF Governance](https://github.com/ocsf/governance/blob/main/Governance.md
 ## How does OCSF relate to STIX?
 OCSF and STIX are compatible and complementary.  While STIX is focused on threat intelligence, campaigns and actors, OCSF is focused on events representing the activities on computer systems, networks and cloud platforms that may have security implications.  Observables represented OCSF can be matched with IOCs from STIX, for example, to determine whether a threat or malicious actor has compromised a system or enterprise environment.
 
-Structured Threat Information Expression (STIX™)
-is a open-source language and serialization format
-used to exchange cyber threat intelligence (CTI).
-For more info on STIX, see
-[this info](https://oasis-open.github.io/cti-documentation/stix/intro.html)
-or the
-(spec itself](https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html)
+STIX has been designed to address specific use cases and challenges without meeting the need to record the activities of a system using telemetry. Consequently, STIX has not achieved widespread adoption, leading entities to develop their schemas for each distinct use case. This proliferation of custom data schemas impedes the exchange and integration of cyber threat intelligence among the community and the industry. OCSF tackles this issue by offering a schema that goes beyond adversary-centric tactics and techniques, encompassing a broader spectrum of system-level actions and behaviors.
+
+Structured Threat Information Expression (STIX™) is an open-source language and serialization format used to exchange cyber threat intelligence (CTI). For more info on STIX, see [this info](https://oasis-open.github.io/cti-documentation/stix/intro.html) or the [spec itself](https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html)
 
 ## How does OCSF relate to the Sigma taxonomy?
 Sigma is a SIEM language format for detection rules.
