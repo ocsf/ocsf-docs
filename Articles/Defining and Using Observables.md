@@ -290,11 +290,6 @@ In this example, `ip` is an observable by dictionary type with `type_id` of `2`.
 
 Notice that the attribute path in each `name` field is the same; the positions in the `devices` and `network_interfaces` arrays is not included.
 
-> [!IMPORTANT]
-> **TODO for reviewers:**
->
-> Should we include array syntax? We arrays could be added to the existing dot syntax. E.g., `foo.bars[0].baz.quxes[3].value` instead of `foo.bars.baz.quxes.value`. Alternately, we could adopt JSON Pointer syntax.
-
 ## Appendix 2: Hidden Types
 It's a bit tedious to keep saying "event classes and objects". In Computer Science terms, these are both abstract data types, and specifically in object-oriented programming terms, their definitions are like classes. The OCSF terminology is a bit loose here. In this section, event class definitions and object definitions will simply be called types. Just note that OCSF also has primitive types (unstructured types) such as `string_t`, including subtypes of their primitive types like `email_t`.
 
