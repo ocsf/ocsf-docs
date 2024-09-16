@@ -251,7 +251,7 @@ For example
 "enrichments": [
      {
           "data": {
-               "hash": 0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494
+               "hash": "0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494"
           },
           "name": "ip",
           "provider": "media.defense.gov",
@@ -260,19 +260,12 @@ For example
      },
      {
           "data": {
-               "yara_rule": "wellmail_unique_strings \\{ meta: description = \"Rule for detection of WellMail based on unique strings contained in the binary\" 
-                    hash = \"0c5ad1e8fe43583e279201cdb1046aea742bae59685e6da24e963a41df987494\" 
-                    strings: $a = \"C:\\Server\\Mail\\App_Data\\Temp\\agent.sh\\src\" 
-                    $b = \"C:/Server/Mail/App_Data/Temp/agent.sh/src/main.go\"
-                    $c = \"HgQdbx4qRNv\" $d = \"042a51567eea19d5aca71050b4535d33d2ed43ba\" 
-                    $e = \"main.zipit\" $f = \"@[^\\s]+?\\s(?P.*?)\\s\" 
-                    condition: uint32(0) == 0x464C457F and 3 of them
-                    \\ author = \"NCSC\"\\}",
-               "name": "ip",
-               "provider": "media.defense.gov",
-               "type": "IP Address",
-               "value": "103.216.221.19"
-          }
+               "yara_rule": "rule \"wellmail_unique_strings\"{...}"
+          },
+          "name": "ip",
+          "provider": "media.defense.gov",
+          "type": "IP Address",
+          "value": "103.216.221.19"
      }
 ]
 ```
