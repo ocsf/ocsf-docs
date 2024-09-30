@@ -1,4 +1,4 @@
-# How to Model Alerts with OCSF
+# How to Model Alerts with OCSF - DRAFT
 
 In OCSF, an alertable signal is an event with the `is_alert` attribute set to `true`.  This is a newer attribute, starting with OCSF version 1.4.  The intent of `is_alert = true` is to signal that the event may require immediate attention by its consumer, usually a SIEM system or the product’s management console where an analyst can be notified, tickets created or the events prioritized.
 
