@@ -4,7 +4,7 @@ August 2024
 
 Observables provide a way to enrich OCSF events so that important data can be easily found and queried rather than having to walk though the rather rich and potentially deeply nested structure of an event. Observables are _not_ meant as place to be information that not present in other locations in an event. It is, then, an optional query optimization that is common enough to warrant direct support in the OCSF schema. As an example, if one was looking across all events for presence if a set of IP addresses known to be indicators of compromise, instead of manually look for all occurrences of all attributes of type `ip_t`, or worse, all fields ending with `_ip`, one could query each events `observables` array for `type_id` 2 and the set of IP addresses.
 
-Observables are defined in event class and object definitions in the OCSF metaschema. This is done by associated a data type, data attribute, event class, or object with an observable `type_id`. 
+Observables are defined in event class and object definitions in the OCSF metaschema. This is done by associating a data type, data attribute, event class, or object with an observable `type_id`. 
 
 ## Defining Observables
 The following ways to define observables are supported:
@@ -13,10 +13,10 @@ The following ways to define observables are supported:
 2. Observable by dictionary attribute. All instances of this attribute become observables. The generated observables include the attribute values.
 3. Observable by object. All attributes of this object type become observables. The generated observables do _not_ include a value.
 4. Observable by event class attribute. The attribute in the event class or its subtypes become an observable. Note that these are attributes defined at the base of the event, and not in nested structures. Also note that the attribute type can be any valid attribute type: a primitive, a primitive subtype, or an object.
-5. Observable by object attribute. The attribute in the all instances of the object or its subtypes become observables. Note that these are attributes defined at the base of the object, and not in nested structures. Also note that the attribute type can be any valid attribute type: a primitive, a primitive subtype, or an object.
-6. Observable by class-specific attribute path. Attributes on the specified attributes path become observables. (The plural wording is used because a path element may refer to an array, resulting on multiple observables.)
+5. Observable by object attribute. The attribute in all instances of the object or its subtypes become observables. Note that these are attributes defined at the base of the object, and not in nested structures. Also note that the attribute type can be any valid attribute type: a primitive, a primitive subtype, or an object.
+6. Observable by class-specific attribute path. Attributes on the specified attributes path become observables. (The plural wording is used because a path element may refer to an array, resulting in multiple observables.)
 
-In all cases, the definition of an observable is a integer number of OCSF type `integer_t`, a 32-bit signed integer. This number becomes the `observable` object's `type_id` value. The only values with a special meaning are the typical OCSF enum integer values of `0` (Unknown) and `99` (Other). There is no other special meaning or special ranges of values.
+In all cases, the definition of an observable is an integer number of OCSF type `integer_t`, a 32-bit signed integer. This number becomes the `observable` object's `type_id` value. The only values with a special meaning are the typical OCSF enum integer values of `0` (Unknown) and `99` (Other). There is no other special meaning or special ranges of values.
 
 As with most things in OCSF, these definitions can be in the base of the core schema, one of the core schema extensions, or any other private extension (those extensions outside of the core schema).
 
@@ -25,7 +25,7 @@ As a historical note, definition types 1 and 3 have been in use since schema ver
 ### Definition Example: Observable by Dictionary Type
 Defining an observable by dictionary type is, naturally, done in a metaschema `dictionary.json` file. The definition is done by adding an `observable` field to a type definition.
 
-This, along with defining observable objects (which are also a kind of type) are the broadest ways to define observables. All instances attributes of this type (regardless of attribute name) become observables.
+This, along with defining observable objects (which are also a kind of type) are the broadest ways to define observables. All attributes of this type (regardless of attribute name) become observables.
 
 Example in a `dictionary.json` file:
 ```jsonc
@@ -56,7 +56,7 @@ Example in a `dictionary.json` file:
 ### Definition Example: Observable by Dictionary Attribute
 Defining an observable by dictionary attribute is also done in a metaschema `dictionary.json` file. The definition is done by adding an `observable` field to an attribute definition. 
 
-Definitions done this way limit the creation of observables instances of this specific attribute, regardless of where it is used.
+Definitions done this way limit the creation of observable instances of this specific attribute, regardless of where it is used.
 
 Example in a `dictionary.json` file:
 ```jsonc
@@ -79,7 +79,7 @@ Example in a `dictionary.json` file:
 ```
 
 ### Definition Example: Observable by Object
-Defining an observable by object is in a metaschema object definition file. The definition is done by adding an `observable` field directly in the object definition object. This also works for object definitions that extend another, including the special patch case. For both regular and patch extends cases, the observable definition adds or replaces any existing object-level observable definition.
+Defining an observable by object is done in a metaschema object definition file. The definition is done by adding an `observable` field directly in the object definition object. This also works for object definitions that extend another, including the special patch case. For both regular and patch extends cases, the observable definition adds or replaces any existing object-level observable definition.
 
 This, along with defining observables by dictionary type, are the broadest ways to define observables. All instances attributes of this type (regardless of attribute name) become observables.
 
@@ -122,10 +122,12 @@ Example in object definition file `objects/cve.json`:
 }
 ```
 
-Event classes work identically: attribute observable definitions occur in attribute detail objects inside the `attributes` object.
+Event classes work identically: attribute observables are defined inside attribute details.
 
 ### Definition Example: Observable by Class-Specific Attribute Path
-This last observable definition type allows defining an observable for an attribute inside a nested structure for an event class, though it can be used for attributes directly defined in the class (in this case being a alternative to defining event class attribute observables). This type of definition is done by adding an `observables` object to the event class definition that maps from attribute paths to observable `type_id` values.
+This last observable definition type allows defining an observable for an attribute inside a nested structure for an event class, though it can be used for attributes directly defined in the class (in this case being a alternative to defining event class attribute observables). 
+
+This type of definition is done by adding an top-level `observables` field to the event class definition whose value is a JSON object that maps from attribute paths to observable `type_id` values.
 
 Class-specific attribute path definitions also work for event class `extends` definitions both for the normal case (subclass / subtype) as well as the "patch extends" case. In the extends cases, the class-specific observable definitions replace a prior definition or add a new definition. 
 
@@ -143,7 +145,7 @@ Example in event class definition file `events/bag.json`:
   "attributes": {
     // ... other attributes
     
-    // Here was add the items array, where each item has (at least) a type_id attribute
+    // Here we add the items array: an array of item objects
     "items": {
       "requirement": "required"
     }
@@ -156,7 +158,7 @@ Example in event class definition file `events/bag.json`:
 }
 ```
 
-This definitions causes the `type_id` value of each item object to become an observable, but _only_ for events of the `bag` event class, and nowhere else.
+This definition causes the `type_id` value of each item object to become an observable, but _only_ for events of the `bag` event class, and nowhere else.
 
 ### Definition Nuances
 Defining observables has a few nuances, described in the next few sections.
@@ -169,7 +171,7 @@ Developers of private extensions should be extra wary to avoid collisions. Unlik
 #### Definition Nuance: Precedence and the "Use the Most General" Rule
 The definition types, as listed in the [Defining Observables](#defining-observables) section, establish a precedence with 1 being the most general to 6 being the most specific.
 
-In cases where an OCSF event has an attribute is affected by more than one observable definition, _the most general_ should be used.
+In cases where an OCSF event has an attribute that is affected by more than one observable definition, _the most general_ should be used.
 
 #### Definition Nuance: Extends
 Observable definitions can be overridden in extensions (via `extends`) in event class and object definitions, including the special "patch" type of extends. This is also mentioned above, though repeated here to emphasize that this is a general rule for all types of observable definitions.
@@ -181,7 +183,7 @@ Defining observables in definitions of hidden event classes or object is not sup
 Profile definitions can override attribute observables (as with any other attribute field), though cannot modify object or class-specific attribute path observables (the top-level `observable` definitions). In other words, with regard to observables profiles can only affect observables by attributes.
 
 > [!NOTE]
-> Implementation-wise, this restriction may not be difficult to overcome, however it does become difficult to conceptualize and visualize the effect of a profile if it can affect an a top level property of event class or object this way. Constraints, another top-level event class / object concept, are similarly not controllable by profiles.
+> Implementation-wise, this restriction may not be difficult to overcome, however it does become difficult to conceptualize and visualize the effect of a profile if it can affect a top level property of event class or object this way. Constraints, another top-level event class / object concept, are similarly not controllable by profiles.
 
 #### Definition Nuance: New Object Observables Discouraged
 The OCSF community currently discourages defining objects as observables. The object observable merely indicates the presence of the object in the event on a specific path. A second query would be needed to interrogate the object. It is not terribly useful.
@@ -192,9 +194,9 @@ The `observable` object's `value` field is used for attributes that are primitiv
 For more, see [Populating The Value Field](#populating-the-value-field).
 
 #### Definition Nuance: Event Class Observables Are Not Supported
-Defining an event class as an observable is not supported. This would be essentially redundant with the `type_uid` field, which already uniquely identifies an OCSF event's event class. In other words, a query for an event class's observable ID might as well query for event classes `type_uid`. Further, the OCSF community is trying to move away from observables by object, which this would be similar to, since these do no populate the `observable` object's `value` field.
+Defining an event class as an observable is not supported. This would be essentially redundant with the `type_uid` field, which already uniquely identifies an OCSF event's event class. In other words, a query for an event class's observable ID might as well query for event classes `type_uid`. Further, the OCSF community is trying to move away from observables by object, which this would be similar to, since these do not populate the `observable` object's `value` field.
 
-The only thing this sort of definition would enable would be to detect events that are in event class inheritance subtree at a finer grain than categories; a fairly esoteric use-case.
+The only thing this sort of definition would enable would be to detect events that are in an event class inheritance subtree at a finer grain than categories; a fairly esoteric use-case.
 
 ## Using Observables
 Observables can be generated automatically, though of course can also be created manually. Creating observables automatically requires walking an event's structure along with a compiled schema, looking for observable definitions at each level of the structure, as well at each leaf (each primitive value).
@@ -212,9 +214,7 @@ The `observable` object's `value` field should be populated for all primitive ty
 For arrays of primitive types, one `observable` object should be created for each element of the array with the `value` field being set to the array element's value.
 
 #### All Observable Values Are Strings
-The `observable` object's `value` is defined as a type `string_t`. (Specifically notice that the type of `value` is not the problematic `json_t` type, which means any type.) 
-
-A primitive value that is not a string (either `string_t` or a subtype of `string_t`) must be converted to string.
+The `observable` object's `value` is defined as a type `string_t`. A primitive value that is not a string (either `string_t` or a subtype of `string_t`) must be converted to string.
 
 Suggested conversions of non-string values:
 * `integer_t` and `long_t`: base 10 string.
@@ -226,7 +226,7 @@ Suggested conversions of non-string values:
 > About `null`, it's weird. Don't overthink it. OCSF does not have a null type. In practice this means OCSF does not distinguish between a field that has a `null` value and a missing field. For observables, when creating them for primitive fields (like strings and numbers), if the field's value is `null`, then you may either set the `observable` object's `value` to `null` or not set the `value` field -- the meaning of each is equivalent. (This is not true in general. For those of that remember the XML era, distinguishing `null` from missing was one of the consistently annoying edge cases you'd have to always keep in mind.)
 
 ## Appendix 1: Attribute Paths
-Attribute paths occur in two places: in the `observable` object's `name` attribute as a path reference to a field in the event, and in class-specific attribute observable definitions. In both cases the paths are same. (Author's note: I believe this is the only use of JSON path-like capability in OCSF.)
+Attribute paths occur in two places: in the `observable` object's `name` attribute as a path reference to a field in the event, and in class-specific attribute observable definitions. In both cases the paths are the same. (Note: this is the only use of a JSON path-like capability in OCSF.)
 
 The general pattern is dot-separated attribute names, for example `foo.bar`. Using the dot (".") as a separator works well because OCSF does not use dots in attribute names. There is no special notation for arrays, so these paths only tell us that a reference is for _one of_ the items along a path that includes one or more arrays.
 
