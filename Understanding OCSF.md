@@ -290,7 +290,7 @@ Examples of recommended base attributes are `timezone_offset, status_id, message
 
 Examples of optional base attributes are `activity_name`, `start_time`, `end_time`, `count`, `duration`, `unmapped`.
 
-**Each event class has a unique `class_uid` attribute value** which is the event class identifier.  It is a required attribute whose value overrides the nominal Base Event class value of `99`.  Event class friendly names are defined by the schema, optionally populate the `class_name` attribute and are descriptive of the specific class, such as File System Activity or Process Activity.
+**Each event class has a unique `class_uid` attribute value** which is the event class identifier.  It is a required attribute whose value overrides the nominal Base Event class value of `0`.  Event class friendly names are defined by the schema, optionally populate the `class_name` attribute and are descriptive of the specific class, such as File System Activity or Process Activity.
 
 **Every event class has a `category_uid` attribute value** which indicates which OCSF Category the class belongs to.  An event class may be of only one category.  Category friendly names are defined by the schema, optionally populate the <code>category_name</code> attribute and are descriptive of the specific category the class belongs to, such as System Activity or Network Activity.
 
