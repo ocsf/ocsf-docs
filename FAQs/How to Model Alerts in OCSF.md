@@ -1,4 +1,4 @@
-# How to Model Alerts with OCSF - DRAFT
+# How to Model Alerts with OCSF
 
 Through version 1.3 of OCSF the concept of an alert, or alertable signal, was not explicitly defined. In practice any event might be considered an alert, if it was deemed important and in many cases worthy of some additional form of notification. All OCSF events have a required `severity_id` attribute. Elevated values such as `Major` or `Critical` could be interpreted to be alertable signals, indirectly. Examples of alertable signals then might be events with high severity, elevated risk scores, detected malware, MITRE ATT&CK annotations, and rule or policy violations.  Other alertable signals might be the creation of a Finding based on some type of analysis.
 
