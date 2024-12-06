@@ -8,7 +8,7 @@ Date: September 2024
 
 Status: RFC - Corresponds to schema version 1.0.0
 
-Version: 1.15
+Version: 1.16
 
 ## Introduction to the Framework and Schema
 
@@ -241,12 +241,12 @@ For example
 
 ```json
 "metadata": {
-    "logged_time": 1659056959885810,
-    "modified_time": 1659056959885807,
-    "processed_time": 1659056959885796,
+    "logged_time": 1659056959885,
+    "modified_time": 1659056959885,
+    "processed_time": 1659056959885,
     "sequence": 69,
     "uid": "1310fc5c-0edb-11ed-88fc-0242ac110002",
-    "version": "1.0.0-RC3"
+    "version": "1.0.0"
 },
 "enrichments": [
      {
