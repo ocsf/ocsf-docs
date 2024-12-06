@@ -324,7 +324,7 @@ A snippet of a File Activity event example with random values is shown below[^9]
      "class_name": "File System Activity",
      "class_uid": 1001,
      "device": {},
-     "end_time": 1685403212867803,
+     "end_time": 1685403212867,
      "file": {},
      "message": "entry queue amateur",
      "metadata": {},
@@ -334,7 +334,7 @@ A snippet of a File Activity event example with random values is shown below[^9]
      "start_time": 1685403212792,
      "status": "img logs grove",
      "status_detail": "barrier filled clothes",
-     "time": 1685403212834047,
+     "time": 1685403212834,
      "type_name": "File System Activity: Decrypt",
      "type_uid": 100111
 }
