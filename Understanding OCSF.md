@@ -331,7 +331,7 @@ A snippet of a File Activity event example with random values is shown below[^9]
      "observables": [],
      "severity": "Low",
      "severity_id": 2,
-     "start_time": 1685403212792508,
+     "start_time": 1685403212792,
      "status": "img logs grove",
      "status_detail": "barrier filled clothes",
      "time": 1685403212834047,
