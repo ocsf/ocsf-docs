@@ -60,7 +60,8 @@ E.g. a SIEM that creates findings may have enough knowledge and state to tie mul
 ---
 
 ## How do I use the Actor object?
-The Actor object is intended for use in event classes when knowledge of one entity that is initiating or causing some action on another entity.  For example, if one process spawns another process, or deletes a file, the first process is the actor in the activity.
+The Actor object is intended for use in event classes when knowledge of one entity that is initiating or causing some action on another entity.  
+For example, a process deleting a file is the actor in a Filesystem Activity event.
 
 From a structural standpoint, the `actor` attribute avoids name collisions with the other end of the activity in cases where a process acts on another process, as those attribute names would be in contention at the same level within the class.
 
