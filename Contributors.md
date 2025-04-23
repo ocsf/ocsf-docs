@@ -11,7 +11,7 @@ Aqua Security
 Aquia
 Norwegian Labor Inspection Authority
 Arctic Wolf
-University of rizona
+University of Arizona
 Arklay
 Atlassian
 AT&T
