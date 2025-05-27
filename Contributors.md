@@ -169,7 +169,7 @@ Torq
 Trellix
 Trend Micro
 TUI
-University of Cincinatti
+University of Cincinnati
 Uptycs
 Vectra
 Veeam

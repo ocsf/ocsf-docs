@@ -26,7 +26,7 @@ Process creation through a layer of process indirection (e.g. starting a shell t
 Asking another process to create a process is modelled through some sort of communication event and a single `Process Activity: Launch` event.
 
 For `Process Activity: Launch` events, one should set both `.actor.process` and `.process.parent_process` if the ability to know both is present.
-This will provide the visiblity to know when they differ.
+This will provide the visibility to know when they differ.
 However, your endpoint software must be aware of this difference in order to effectively populate both locations.
 If your endpoint software only reports on parent, then only set `.process.parent_process`.
 However, if your query patterns demand that `.actor.process` be set, you can duplicate the parent information there knowing that this information would be the same the majority of the time anyway.
@@ -56,7 +56,7 @@ Parent process and all the fields in the process object are often critical conte
 
 When going beyond immediate parent, the OCSF 1.4 `process.ancestry` attribute should be used.
 This attribute provides the ability to supply references to processes going up the process ancestry tree (e.g. parent, grandparent, great grandparent, ...).
-The process entity objects in this array contain a small subset of process object atrtributes.
+The process entity objects in this array contain a small subset of process object attributes.
 These fields are meant to enable a lookup of full process details and enable a basic preview of the process.
 It is left up to the implementer to determine how far back to report process ancestry.
 

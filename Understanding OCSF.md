@@ -402,7 +402,7 @@ An example of categories with some of their event classes is shown in the below 
 | File System Activity      | Network Activity      | Account Change                   | Security Finding | Device Inventory Info | Web Resources Activity       |
 | Kernel Extension Activity | HTTP Activity         | Authentication                   |                  | Device Config State   | Application Lifecycle        |
 | Kernel Activity           | DNS Activity          | Authorize Session                |                  |                       | API Activity                 |
-| Memory Activity           | DHCP Activity         | Entity Management                |                  |                       | Web Resrouce Access Activity |
+| Memory Activity           | DHCP Activity         | Entity Management                |                  |                       | Web Resource Access Activity |
 | Module Activity           | RDP Activity          | User Access Management           |                  |                       |                              |
 | Scheduled Job Activity    | SMB Activity          | Group Management                 |                  |                       |                              |
 | Process Activity          | SSH Activity          |                                  |                  |                       |                              |
@@ -429,7 +429,7 @@ For example, a `Security Controls` profile that adds MITRE ATT&CK<sup>TM</sup> A
 
 The `profiles` attribute is an optional array attribute of the Base Event class.  The absence of the `profiles` attribute means no profile attributes are added as would be expected.  Attributes defined with a profile have requirements that cannot be overridden, since profiles are themselves optional; it is assumed that the application of a profile is because those attributes are desired and can be populated.
 
-However some classes, such as System Activity classes, build-in the attributes of a profile, for example the `Host` profile attributes `device` and `actor` are defined in the class.  When a class definition includes the profile attributes, it still registers for that profile in the class definition so as to match any searches across events for that profile. In this case the class defined attribute requirement definitions take precedence.
+However some classes, such as System Activity classes, built-in the attributes of a profile, for example the `Host` profile attributes `device` and `actor` are defined in the class.  When a class definition includes the profile attributes, it still registers for that profile in the class definition so as to match any searches across events for that profile. In this case the class defined attribute requirement definitions take precedence.
 
 Core schema profiles for `Security Control`, `Host`, `Cloud`, `Container` and `Linux` (for the Linux extension described later) are shown in the below table with their attributes.
 
