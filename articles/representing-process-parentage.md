@@ -3,13 +3,13 @@ Mitchell Wasson
 February 2025
 
 Effectively representing endpoint process parentage is frequently discussed, because the OCSF schema has several fields that support this use case (`actor.process`, `process.parent_process`, `process.lineage` and `process.ancestry`).
-This article clarifies and expands on those discussions to provide presecriptive guidance for representing process parentage within the OCSF schema.
+This article clarifies and expands on those discussions to provide prescriptive guidance for representing process parentage within the OCSF schema.
 
 ## Actor/Creator or Parent
 
 [Confusion on this topic]((https://github.com/ocsf/ocsf-schema/discussions/1194)) arises from the fact that the OCSF schema enables the simultaneous expression of `.actor.process` and `.process.parent_process` in `Process Activity: Launch` events.
 People are usually wondering if they should put the launched process's parent in `.actor.process`, `.process.parent_process` or both.
-Again, presecriptive guidance will be provided, but it is important to understand the difference between the actor (aka the "creator") and the parent in a process launch/creation event.
+Again, prescriptive guidance will be provided, but it is important to understand the difference between the actor (aka the "creator") and the parent in a process launch/creation event.
 
 The creator is the process that initiated the creation of a new process with the endpoint operating system.
 The parent is the process that the newly created process inherits properties from according to operating system rules.
@@ -21,12 +21,12 @@ However, this guarantee is not present on Windows.
 This is a straightforward technique and has many legitimate use cases.
 
 Note this situation shouldn't be confused with creating a process through a layer of indirection or communicating with another common process that will create a process for you.
-The above disinction of creator vs parent applies to mechanisms natively supported through operating system APIs that can't be modelled otherwise.
+The above distinction of creator vs parent applies to mechanisms natively supported through operating system APIs that can't be modelled otherwise.
 Process creation through a layer of process indirection (e.g. starting a shell to start your program) is modelled through two `Process Activity: Launch` events.
 Asking another process to create a process is modelled through some sort of communication event and a single `Process Activity: Launch` event.
 
 For `Process Activity: Launch` events, one should set both `.actor.process` and `.process.parent_process` if the ability to know both is present.
-This will provide the visiblity to know when they differ.
+This will provide the visibility to know when they differ.
 However, your endpoint software must be aware of this difference in order to effectively populate both locations.
 If your endpoint software only reports on parent, then only set `.process.parent_process`.
 However, if your query patterns demand that `.actor.process` be set, you can duplicate the parent information there knowing that this information would be the same the majority of the time anyway.
@@ -56,7 +56,7 @@ Parent process and all the fields in the process object are often critical conte
 
 When going beyond immediate parent, the OCSF 1.4 `process.ancestry` attribute should be used.
 This attribute provides the ability to supply references to processes going up the process ancestry tree (e.g. parent, grandparent, great grandparent, ...).
-The process entity objects in this array contain a small subset of process object atrtributes.
+The process entity objects in this array contain a small subset of process object attributes.
 These fields are meant to enable a lookup of full process details and enable a basic preview of the process.
 It is left up to the implementer to determine how far back to report process ancestry.
 
