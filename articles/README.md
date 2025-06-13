@@ -4,13 +4,11 @@ This section contains in-depth technical articles about various aspects of the O
 
 ## Available Articles
 
-### Core Concepts
 - **[Profiles are Powerful](profiles-are-powerful.md)** - Deep dive into OCSF profiles and their four modeling approaches
 - **[Defining and Using Observables](defining-and-using-observables.md)** - Guide to working with observables in OCSF
 - **[Representing Process Parentage](representing-process-parentage.md)** - How to model process relationships in OCSF
-
-### Advanced Topics
 - **[Patching Core Using Extensions](patching-core-using-extensions.md)** - How to extend OCSF core schema using extensions
+- **[Modeling Alerts](modeling-alerts.md)** - How to Model Alerts with OCSF
 
 ## Contributing Articles
 
