@@ -13,10 +13,10 @@ Open Cybersecurity Schema Framework (OCSF) is an open-source effort to create a 
 
 ## Key Benefits
 
-- **Standardization**: Provides a common format for security events
-- **Interoperability**: Enables tools to work together seamlessly  
-- **Efficiency**: Reduces manual work in security analytics
-- **Community-Driven**: Backed by major industry players
+- **Standardization**: Provides a common format for security events.
+- **Interoperability**: Enables tools to work together seamlessly.
+- **Efficiency**: Reduces manual work in security analytics.
+- **Community-Driven**: Backed by major industry players.
 
 ## Getting Started
 
