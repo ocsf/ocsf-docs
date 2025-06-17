@@ -6,14 +6,10 @@ Welcome to the Open Cybersecurity Schema Framework (OCSF) documentation reposito
 
 New to OCSF? Start here:
 
-1. **[Getting Started Guide](getting-started/)** - Your first steps with OCSF
-2. **[Understanding OCSF](overview/understanding-ocsf.md)** - Core concepts and architecture
-3. **[Frequently Asked Questions](faqs/)** - Common questions answered
+1. **[Understanding OCSF](overview/understanding-ocsf.md)** - Core concepts and architecture
+2. **[Frequently Asked Questions](faqs/)** - Common questions answered
 
 ## 📚 Documentation Structure
-
-### [📖 Getting Started](getting-started/)
-Your entry point to OCSF - basic concepts, quick start guide, and navigation help.
 
 ### [🔍 Overview](overview/)
 High-level documentation including the comprehensive "Understanding OCSF" guide and key concepts.
