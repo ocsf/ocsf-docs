@@ -233,37 +233,37 @@ The general pattern is dot-separated attribute names, for example `foo.bar`. Usi
 
 These attribute path references are similar (at least in spirit) to [JSON Pointer](https://www.rfc-editor.org/rfc/rfc6901), [JSONPath](https://www.rfc-editor.org/rfc/rfc9535), and the syntax used by the [`jq` command-line tool](https://github.com/jqlang/jq), though simpler and notably without array notation.
 
-### Array Element Notation Variations
+### Path Notation Variations
 
-While OCSF attribute paths use a simplified dot notation without explicit array indexing, producers may represent array element paths in several legitimate ways when populating the `name` field of observable objects:
+While OCSF attribute paths use a simplified dot notation, producers may represent attribute paths in several legitimate ways when populating the `name` field of observable objects. This flexibility accommodates different producer capabilities and existing tooling preferences across various structural contexts.
 
-- **Generic array reference**: `resources.uid` - References the attribute across all array elements
+#### Basic Path Notation
+- **Simple dot notation**: `user.name` - Standard OCSF path notation
+- **Nested object paths**: `user.profile.email` - Multi-level object traversal
+
+#### Array Path Notation
+- **Simple array reference**: `resources.uid` - References the attribute across all array elements
 - **Array bracket notation**: `resources[].uid` - Explicitly indicates array traversal  
 - **Indexed reference**: `resources[0].uid` - References a specific array element by index
 - **Root-relative JSONPath**: `$.resources[0].uid` - Full JSONPath notation starting from document root
 
-All these notations are considered valid representations of the same logical path when an attribute exists within an array structure. Validation systems should accept any of these formats as legitimate observable names.
+All these notations are considered valid representations of the same logical path when referencing attributes within nested structures. Validation systems should accept any of these formats as legitimate observable names.
 
 Let's say we have a event with a nested structure as follows:
 ```jsonc
 {
   // ... other event fields
+  "cloud": {
+    "account": {
+      "uid": "111122223333"
+    }
+  },
   "resources": [
     {
-      "owner": {
-        "account": {
-          "uid": "111122223333"
-        }
-      },
       "type": "AWS::KMS::Key",
       "uid": "arn:aws:kms:us-west-2:111122223333:key/example1"
     },
     {
-      "owner": {
-        "account": {
-          "uid": "111122223333"
-        }
-      },
       "type": "AWS::KMS::Key",
       "uid": "arn:aws:kms:us-west-2:111122223333:key/example2"
     }
@@ -281,7 +281,12 @@ In this example, `uid` is an observable by dictionary type with `type_id` of `10
   ],
   "observables": [
     {
-      "name": "resources.uid",         //Generic notation
+      "name": "cloud.account.uid",      // Basic, non-array path
+      "type_id": 35,
+      "value": "111122223333"
+    },
+    {
+      "name": "resources.uid",         //Simple array notation
       "type_id": 10,
       "value": "arn:aws:kms:us-west-2:111122223333:key/example1"
     },
