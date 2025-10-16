@@ -3,7 +3,11 @@ Original Author: Rick Mouritzen, August 2024
 
 Updates: Rajas Panat, October 2025
 
-Observables provide a way to enrich OCSF events so that important data can be easily found and queried rather than having to walk through the rather rich and potentially deeply nested structure of an event. Observables are _not_ meant as a place to store information that is not present in other locations in an event. It is, then, an optional query optimization that is common enough to warrant direct support in the OCSF schema. As an example, if one was looking across all events for the presence of a set of IP addresses known to be indicators of compromise, instead of manually looking for all occurrences of all attributes of type `ip_t`, or worse, all fields ending with `_ip`, one could query each event's `observables` array for `type_id` 2 and the set of IP addresses.
+Observables provide a way to enrich OCSF events so that important data can be easily found and queried. They help avoid the need to navigate the complex and deeply nested structure of an event.
+
+Observables are not intended to store new information. They should reference data that already exists elsewhere in the event. In this way, observables act as an optional query optimization that is common enough to have direct support in the OCSF schema.
+
+For example, when searching across all events for a set of IP addresses known to be indicators of compromise, instead of scanning every field of type ip_t, or every field ending with _ip, one can simply query each event’s observables array for entries with type_id equal to 2 and the relevant IP addresses.
 
 Observables are defined in event class and object definitions in the OCSF metaschema. This is done by associating a data type, data attribute, event class, or object with an observable `type_id`. 
 
