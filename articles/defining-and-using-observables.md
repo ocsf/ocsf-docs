@@ -246,10 +246,10 @@ While OCSF attribute paths use a simplified dot notation, producers may represen
 - **Nested object paths**: `user.profile.email` - Multi-level object traversal
 
 #### Array Path Notation
-- **Simple array reference**: `resources.uid` - References the attribute across all array elements
+- **Simple notation**: `resources.uid` - References the attribute across all array elements
 - **Array bracket notation**: `resources[].uid` - Explicitly indicates array traversal  
-- **Indexed reference**: `resources[0].uid` - References a specific array element by index
-- **Root-relative JSONPath**: `$.resources[0].uid` - Full JSONPath notation starting from document root
+- **Indexed notation**: `resources[0].uid` - References a specific array element by index
+- **Root-relative JSONPath notation**: `$.resources[0].uid` - Full JSONPath notation starting from document root
 
 All these notations are considered valid representations of the same logical path when referencing attributes within nested structures. Validation systems should accept any of these formats as legitimate observable names.
 
@@ -290,7 +290,7 @@ In this example, `uid` is an observable by dictionary type with `type_id` of `10
       "value": "111122223333"
     },
     {
-      "name": "resources.uid",         //Simple array notation
+      "name": "resources.uid",         //Simple notation
       "type_id": 10,
       "value": "arn:aws:kms:us-west-2:111122223333:key/example1"
     },
@@ -300,7 +300,7 @@ In this example, `uid` is an observable by dictionary type with `type_id` of `10
       "value": "arn:aws:kms:us-west-2:111122223333:key/example2"
     },
     {
-      "name": "resources[0].uid",        // Indexed reference notation
+      "name": "resources[0].uid",        // Indexed notation
       "type_id": 10,
       "value": "arn:aws:kms:us-west-2:111122223333:key/example1"
     },
