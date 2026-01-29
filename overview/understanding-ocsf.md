@@ -496,7 +496,7 @@ Examples of new experimental categories, new event classes that contain some new
 
 | **Findings**                         | **Policy<sup>Dev</sup>**                   | **Remediation<sup>Dev</sup>**                 | **Diagnostic<sup>Dev</sup>** |
 | ------------------------------------ | ------------------------------------------ | --------------------------------------------- | ---------------------------- |
-| Incident Creation<sup>Dev</sup>      | Clipbaord Content Protection<sup>Dev</sup> | File Remediation<sup>Dev</sup>                | CPU Usage<sup>Dev</sup>      |
+| Incident Creation<sup>Dev</sup>      | Clipboard Content Protection<sup>Dev</sup> | File Remediation<sup>Dev</sup>                | CPU Usage<sup>Dev</sup>      |
 | Incident Associate<sup>Dev</sup>     | Compliance<sup>Dev</sup>                   | Folder Remediation<sup>Dev</sup>              | Memory Usage<sup>Dev</sup>   |
 | Incident Closure<sup>Dev</sup>       | Compliance Scan<sup>Dev</sup>              | Startup Application Remediation<sup>Dev</sup> | Throughput<sup>Dev</sup>     |
 | Incident Update<sup>Dev</sup>        | Content Protection<sup>Dev</sup>           | User Session Remediation<sup>Dev</sup>        |                              |
