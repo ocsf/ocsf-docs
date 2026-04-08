@@ -8,7 +8,7 @@ Date: September 2024
 
 Status: RFC - Corresponds to schema version 1.0.0
 
-Version: 1.15
+Version: 1.16
 
 ## Introduction to the Framework and Schema
 
@@ -241,12 +241,12 @@ For example
 
 ```json
 "metadata": {
-    "logged_time": 1659056959885810,
-    "modified_time": 1659056959885807,
-    "processed_time": 1659056959885796,
+    "logged_time": 1659056959885,
+    "modified_time": 1659056959885,
+    "processed_time": 1659056959885,
     "sequence": 69,
     "uid": "1310fc5c-0edb-11ed-88fc-0242ac110002",
-    "version": "1.0.0-RC3"
+    "version": "1.0.0"
 },
 "enrichments": [
      {
@@ -324,17 +324,17 @@ A snippet of a File Activity event example with random values is shown below[^9]
      "class_name": "File System Activity",
      "class_uid": 1001,
      "device": {},
-     "end_time": 1685403212867803,
+     "end_time": 1685403212867,
      "file": {},
      "message": "entry queue amateur",
      "metadata": {},
      "observables": [],
      "severity": "Low",
      "severity_id": 2,
-     "start_time": 1685403212792508,
+     "start_time": 1685403212792,
      "status": "img logs grove",
      "status_detail": "barrier filled clothes",
-     "time": 1685403212834047,
+     "time": 1685403212834,
      "type_name": "File System Activity: Decrypt",
      "type_uid": 100111
 }
@@ -468,7 +468,7 @@ The event classes **may** include the Host profile and **may** include the Secur
 
 #### Identity & Access Management
 
-The event classes **would** include the Host profile, (due to actor.user), **may **include the Cloud profile, and **would not** include the Security Control profile.
+The event classes **would** include the Host profile, (due to `actor.user`), **may** include the Cloud profile, and **would not** include the Security Control profile.
 
 ### Personas and Profiles
 
@@ -496,7 +496,7 @@ Examples of new experimental categories, new event classes that contain some new
 
 | **Findings**                         | **Policy<sup>Dev</sup>**                   | **Remediation<sup>Dev</sup>**                 | **Diagnostic<sup>Dev</sup>** |
 | ------------------------------------ | ------------------------------------------ | --------------------------------------------- | ---------------------------- |
-| Incident Creation<sup>Dev</sup>      | Clipbaord Content Protection<sup>Dev</sup> | File Remediation<sup>Dev</sup>                | CPU Usage<sup>Dev</sup>      |
+| Incident Creation<sup>Dev</sup>      | Clipboard Content Protection<sup>Dev</sup> | File Remediation<sup>Dev</sup>                | CPU Usage<sup>Dev</sup>      |
 | Incident Associate<sup>Dev</sup>     | Compliance<sup>Dev</sup>                   | Folder Remediation<sup>Dev</sup>              | Memory Usage<sup>Dev</sup>   |
 | Incident Closure<sup>Dev</sup>       | Compliance Scan<sup>Dev</sup>              | Startup Application Remediation<sup>Dev</sup> | Throughput<sup>Dev</sup>     |
 | Incident Update<sup>Dev</sup>        | Content Protection<sup>Dev</sup>           | User Session Remediation<sup>Dev</sup>        |                              |

@@ -1,8 +1,13 @@
 # Defining and Using Observables
-Rick Mouritzen,
-August 2024
+Original Author: Rick Mouritzen, August 2024
 
-Observables provide a way to enrich OCSF events so that important data can be easily found and queried rather than having to walk though the rather rich and potentially deeply nested structure of an event. Observables are _not_ meant as place to be information that not present in other locations in an event. It is, then, an optional query optimization that is common enough to warrant direct support in the OCSF schema. As an example, if one was looking across all events for presence if a set of IP addresses known to be indicators of compromise, instead of manually look for all occurrences of all attributes of type `ip_t`, or worse, all fields ending with `_ip`, one could query each events `observables` array for `type_id` 2 and the set of IP addresses.
+Updates: Rajas Panat, October 2025
+
+Observables provide a way to enrich OCSF events so that important data can be easily found and queried. They help avoid the need to navigate the complex and deeply nested structure of an event.
+
+Observables are not intended to store new information. They should reference data that already exists elsewhere in the event. In this way, observables act as an optional query optimization that is common enough to have direct support in the OCSF schema.
+
+For example, when searching across all events for a set of IP addresses known to be indicators of compromise, instead of scanning every field of type ip_t, or every field ending with _ip, one can simply query each event’s observables array for entries with type_id equal to 2 and the relevant IP addresses.
 
 Observables are defined in event class and object definitions in the OCSF metaschema. This is done by associating a data type, data attribute, event class, or object with an observable `type_id`. 
 
@@ -127,7 +132,7 @@ Event classes work identically: attribute observables are defined inside attribu
 ### Definition Example: Observable by Class-Specific Attribute Path
 This last observable definition type allows defining an observable for an attribute inside a nested structure for an event class, though it can be used for attributes directly defined in the class (in this case being a alternative to defining event class attribute observables). 
 
-This type of definition is done by adding an top-level `observables` field to the event class definition whose value is a JSON object that maps from attribute paths to observable `type_id` values.
+This type of definition is done by adding a top-level `observables` field to the event class definition whose value is a JSON object that maps from attribute paths to observable `type_id` values.
 
 Class-specific attribute path definitions also work for event class `extends` definitions both for the normal case (subclass / subtype) as well as the "patch extends" case. In the extends cases, the class-specific observable definitions replace a prior definition or add a new definition. 
 
@@ -209,7 +214,7 @@ Whether creating observables manually -- a part of mapping process -- or automat
 The `observable` object's `name` attribute is an attribute path reference. See [Appendix 1: Attribute Paths](#appendix-1-attribute-paths) for details.
 
 ### Populating the Value Field
-The `observable` object's `value` field should be populated for all primitive types (strings, numbers, booleans), _and_ for arrays of primitive types (see next paragraph). The `value` field is specifically not meant to be used for observable objects, nor for for arrays of objects.
+The `observable` object's `value` field should be populated for all primitive types (strings, numbers, booleans), _and_ for arrays of primitive types (see next paragraph). The `value` field is specifically not meant to be used for observable objects, nor for arrays of objects.
 
 For arrays of primitive types, one `observable` object should be created for each element of the array with the `value` field being set to the array element's value.
 
@@ -232,63 +237,85 @@ The general pattern is dot-separated attribute names, for example `foo.bar`. Usi
 
 These attribute path references are similar (at least in spirit) to [JSON Pointer](https://www.rfc-editor.org/rfc/rfc6901), [JSONPath](https://www.rfc-editor.org/rfc/rfc9535), and the syntax used by the [`jq` command-line tool](https://github.com/jqlang/jq), though simpler and notably without array notation.
 
+### Path Notation Variations
+
+While OCSF attribute paths use a simplified dot notation, producers may represent attribute paths in several legitimate ways when populating the `name` field of observable objects. This flexibility accommodates different producer capabilities and existing tooling preferences across various structural contexts.
+
+#### Basic Path Notation
+- **Simple dot notation**: `user.name` - Standard OCSF path notation
+- **Nested object paths**: `user.profile.email` - Multi-level object traversal
+
+#### Array Path Notation
+- **Simple notation**: `resources.uid` - References the attribute across all array elements
+- **Array bracket notation**: `resources[].uid` - Explicitly indicates array traversal  
+- **Indexed notation**: `resources[0].uid` - References a specific array element by index
+- **Root-relative JSONPath notation**: `$.resources[0].uid` - Full JSONPath notation starting from document root
+
+All these notations are considered valid representations of the same logical path when referencing attributes within nested structures. Validation systems should accept any of these formats as legitimate observable names.
+
 Let's say we have a event with a nested structure as follows:
 ```jsonc
 {
   // ... other event fields
-  "devices": [
+  "cloud": {
+    "account": {
+      "uid": "111122223333"
+    }
+  },
+  "resources": [
     {
-      "hostname": "mercury",
-      "network_interfaces": [
-        {
-          "ip": "10.0.0.5"
-        }
-      ]
+      "type": "AWS::KMS::Key",
+      "uid": "arn:aws:kms:us-west-2:111122223333:key/example1"
     },
     {
-      "hostname": "venus",
-      "network_interfaces": [
-        {
-          "ip": "192.168.0.3"
-        },
-        {
-          "ip": "10.100.0.42"
-        }
-      ]
+      "type": "AWS::KMS::Key",
+      "uid": "arn:aws:kms:us-west-2:111122223333:key/example2"
     }
   ]
 }
 ```
 
-In this example, `ip` is an observable by dictionary type with `type_id` of `2`. The following shows what the observables for this event look like:
+In this example, `uid` is an observable by dictionary type with `type_id` of `10`. The following shows what the observables for this event look like, demonstrating the various legitimate notation styles:
 
 ```jsonc
 {
   // ... other event fields
-  "devices": [
+  "resources": [
     // ... as above
   ],
   "observables": [
     {
-      "name": "devices.network_interfaces.ip",
-      "type_id": 2,
-      "value": "10.0.0.5"
+      "name": "cloud.account.uid",      // Basic, non-array path
+      "type_id": 35,
+      "value": "111122223333"
     },
     {
-      "name": "devices.network_interfaces.ip",
-      "type_id": 2,
-      "value": "192.168.0.3"
+      "name": "resources.uid",         //Simple notation
+      "type_id": 10,
+      "value": "arn:aws:kms:us-west-2:111122223333:key/example1"
     },
     {
-      "name": "devices.network_interfaces.ip",
-      "type_id": 2,
-      "value": "10.100.0.42"
+      "name": "resources[].uid",         // Array bracket notation
+      "type_id": 10, 
+      "value": "arn:aws:kms:us-west-2:111122223333:key/example2"
+    },
+    {
+      "name": "resources[0].uid",        // Indexed notation
+      "type_id": 10,
+      "value": "arn:aws:kms:us-west-2:111122223333:key/example1"
+    },
+    {
+      "name": "$.resources[1].uid",      // Full JSONPath notation with index
+      "type_id": 10,
+      "value": "arn:aws:kms:us-west-2:111122223333:key/example2"
     }
   ]
 }
 ```
 
-Notice that the attribute path in each `name` field is the same; the positions in the `devices` and `network_interfaces` arrays is not included.
+Notice that while different notation styles are used in the `name` fields, they all represent the same logical path to array elements. The positions in the `resources` array may be explicitly referenced (as in the indexed examples) or omitted.
+
+> **Note for Implementers**: When validating observable names, systems should normalize these different array notations to recognize them as equivalent paths. The choice of notation may depend on the producer's capabilities, preferred representation style, or compatibility with existing JSONPath tooling. Validation logic should treat `resources.uid`, `resources[].uid`, `resources[0].uid`, `resources[*].uid`, and `$.resources[0].uid` as semantically equivalent when referencing array element attributes.
 
 ## Appendix 2: Hidden Types
 It's a bit tedious to keep saying "event classes and objects". In Computer Science terms, these are both abstract data types, and specifically in object-oriented programming terms, their definitions are like classes. The OCSF terminology is a bit loose here. In this section, event class definitions and object definitions will simply be called types. Just note that OCSF also has primitive types (unstructured types) such as `string_t`, including subtypes of their primitive types like `email_t`.
