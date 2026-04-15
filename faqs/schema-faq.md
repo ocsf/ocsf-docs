@@ -205,9 +205,16 @@ Given that `Process Activity: Inject` with `injection_type_id = 2 (Load Library)
 1. `<entity>_result` - The result of the activity on the entity. This is the attempted or actual result of the activity relative to the event `status_id` (e.g. `Success`, `Failure`, etc.)
 1. `<entity>_diff` - The difference between the previous and current state of the entity.
 
-### Example: `Scheduled Job Activity: Update`
+### Example 1: `Scheduled Job Activity: Update`
 
 When a scheduled job is updated, the event might capture the following state information:
 
 - `job` represents the existing job object before the attempted update, since it is the target of the `Update` operation.
 - `job_result` represents the attempted update result, since it is the result of the update operation. Refer to the event `status_id` to determine if the update was successful.
+
+### Example 2: `Entity Management: Update`
+
+When an entity is updated, the event might capture the following state information:
+
+- `entity` represents the managed entity that is being acted upon, since it is the target of the `Update` operation.
+- `entity_result` represents the attempted entity result, since it is the result of the update operation. Refer to the event `status_id` to determine if the update was successful.
