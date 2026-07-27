@@ -9,6 +9,7 @@ This section contains in-depth technical articles about various aspects of the O
 - **[Representing Process Parentage](representing-process-parentage.md)** - How to model process relationships in OCSF
 - **[Patching Core Using Extensions](patching-core-using-extensions.md)** - How to extend OCSF core schema using extensions
 - **[Modeling Alerts](modeling-alerts.md)** - How to Model Alerts with OCSF
+- **[OCSF Storage Strategies](OCSF-Storage-Strategies.md)** - OCSF Iceberg/Parquet Storage Strategies
 
 ## Contributing Articles
 
