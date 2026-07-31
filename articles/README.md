@@ -10,6 +10,7 @@ This section contains in-depth technical articles about various aspects of the O
 - **[Patching Core Using Extensions](patching-core-using-extensions.md)** - How to extend OCSF core schema using extensions
 - **[Modeling Alerts](modeling-alerts.md)** - How to Model Alerts with OCSF
 - **[OCSF Storage Strategies](OCSF-Storage-Strategies.md)** - OCSF Iceberg/Parquet Storage Strategies
+- **[Tamper-Evident, Attributable Event Records](record-integrity.md)** - Making events tamper-evident and independently verifiable with the `record_integrity` profile and `attestation` object
 
 ## Contributing Articles
 
