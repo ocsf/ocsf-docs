@@ -150,22 +150,6 @@ Examples include:
 
 This convention applies uniformly whether the array attribute appears at the top level of an event or within a nested object.
 
-#### Optional Singular Attributes
-
-In addition to array attributes, OCSF permits the inclusion of a **singular form** of an attribute when it represents a distinct or more specific semantic meaning. This pattern is commonly used when:
-
-*   The singular attribute represents a primary, default, or most relevant instance
-*   The array attribute represents the complete set of related instances
-*   Both forms improve clarity or usability of the data model
-
-Examples include:
-
-*   `finding_info` → a single, primary instance
-*   `finding_info_list` → a collection of instances
-``
-
-The singular attribute is optional and should only be defined when it adds meaningful distinction or improves the interpretability of the schema.
-
 
 #### Unique IDs
 
