@@ -565,7 +565,7 @@ OCSF schemas can be extended by adding new attributes, objects, categories, prof
 
 Extensions allow a particular vendor or customer to create a new schema or augment an existing schema.[^10]  Extensions can also be used to factor out non-essential schema domains keeping a schema small.  Extensions to the core schema use the framework in the same way as a new schema, optionally creating categories, profiles or event classes from the dictionary.  Extensions can add new attributes to the dictionary, including new objects.  Extended attribute names can be the same as core schema names but this is not a good practice for a number of reasons.  As with categories, event classes and profiles, extensions have unique IDs within the framework as well as versioning.[^11]
 
-As of this writing, two platform extensions augment the core schema: Linux and Windows.  The Linux extension adds a profile, while the Windows extension adds three classes to the System Activity category.
+Platform extensions for Linux, macOS, and Windows augment the core schema.  The [schema browser](https://schema.ocsf.io) lists the classes, objects, and profiles that each one adds.
 
 Another use of extensions to the core schema is the development of new schema artifacts, which later may be promoted into the core schema or to a platform extension.  Another use of extensions is to add vendor specific extensions in addition to the core schema.  In this case, a best practice is to prefix the schema artifacts with a short identifier associated with the extension range registered.[^12]  Lastly, as mentioned above, entirely new schemas can be constructed as extensions.
 
